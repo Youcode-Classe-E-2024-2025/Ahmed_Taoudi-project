@@ -148,4 +148,13 @@ class Project {
         $query = "DELETE FROM " . $this->table . " WHERE id = :id";
         return $this->conn->query($query, [':id' => $this->id]);
     }
+
+    public function getTeamMembers() {
+        $query = "SELECT u.*, up.joined_at
+                FROM users u
+                JOIN user_projects up ON u.id = up.user_id
+                WHERE up.project_id = :project_id";
+
+        return $this->conn->query($query, [':project_id' => $this->id]);
+    }
 }
