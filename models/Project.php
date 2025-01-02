@@ -157,4 +157,16 @@ class Project {
 
         return $this->conn->query($query, [':project_id' => $this->id]);
     }
+
+    public function addTeamMember($user_id) {
+        $query = "INSERT INTO user_projects (project_id, user_id)
+                VALUES (:project_id, :user_id)";
+
+        $params = [
+            ':project_id' => $this->id,
+            ':user_id' => $user_id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
 }
