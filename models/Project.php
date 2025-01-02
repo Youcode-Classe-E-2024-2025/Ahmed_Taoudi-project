@@ -143,4 +143,9 @@ class Project {
 
         return $this->conn->query($query, $params);
     }
+
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE id = :id";
+        return $this->conn->query($query, [':id' => $this->id]);
+    }
 }
