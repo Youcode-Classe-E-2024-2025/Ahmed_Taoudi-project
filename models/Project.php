@@ -107,4 +107,20 @@ class Project {
        $this->conn->query($query, $params);
     // TODO  :  return id 
     }
+    public function read($id = null) {
+        $query = "SELECT p.*, u.name as creator_name
+                FROM " . $this->table . " p
+                LEFT JOIN users u ON p.created_by = u.id
+                LEFT JOIN user_projects up ON p.id = up.project_id ";
+        
+        $params = [];
+        if ($id) {
+            $query .= " WHERE p.id = :id";
+            $params[':id'] = $id;
+        }
+        
+        $query .= " GROUP BY p.id";
+        
+        return $this->conn->query($query, $params);
+    }
 }
