@@ -123,4 +123,24 @@ class Project {
         
         return $this->conn->query($query, $params);
     }
+    public function update() {
+        $query = "UPDATE " . $this->table . "
+                SET name = :name,
+                    description = :description,
+                    start_date = :start_date,
+                    end_date = :end_date,
+                    status = :status
+                WHERE id = :id";
+
+        $params = [
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':start_date' => $this->start_date,
+            ':end_date' => $this->end_date,
+            ':status' => $this->status,
+            ':id' => $this->id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
 }
