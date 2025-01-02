@@ -63,7 +63,7 @@ class User {
 
     return $this->conn->query($query, $params);
     }
-    
+
     public function read($id = null) {
         $query = "SELECT u.*, r.name as role_name 
                 FROM " . $this->table . " u
@@ -77,4 +77,22 @@ class User {
         
         return $this->conn->query($query, $params);
     }
+
+    public function update() {
+        $query = "UPDATE " . $this->table . "
+                SET name = :name,
+                    email = :email,
+                    role_id = :role_id
+                WHERE id = :id";
+
+        $params = [
+            ':name' => $this->name,
+            ':email' => $this->email,
+            ':role_id' => $this->role_id,
+            ':id' => $this->id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
+
 }
