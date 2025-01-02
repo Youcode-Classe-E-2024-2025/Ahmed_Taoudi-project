@@ -128,4 +128,18 @@ class Task {
             return false;
         }
     }
+    // read
+    public function read($id = null) {
+        $query = "SELECT t.*
+                FROM " . $this->table . " t";
+        
+        $params = [];
+        if ($id) {
+            $query .= " WHERE t.id = :id";
+            $params[':id'] = $id;
+        }
+        
+        return $this->conn->query($query, $params);
+    }
+
 }
