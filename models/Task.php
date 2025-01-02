@@ -153,5 +153,16 @@ class Task {
 
         return $this->conn->query($query, $params);
     }
+    
+    public function removeUser($user_id) {
+        $query = "DELETE FROM task_users 
+                WHERE task_id = :task_id AND user_id = :user_id";
 
+        $params = [
+            ':task_id' => $this->id,
+            ':user_id' => $user_id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
 }
