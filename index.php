@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "assets/helper/fonctions.php";
-require_once "models/Router.php";
+require_once "core/Router.php";
 require_once "models/Database.php";
 
 // CSRF
