@@ -99,4 +99,19 @@ class User {
         return $this->conn->query($query, [':id' => $this->id]);
     }
 
+    public function login($email, $password) {
+        $query = "SELECT u.*, r.name as role_name 
+                FROM " . $this->table . " u
+                LEFT JOIN roles r ON u.role_id = r.id 
+                WHERE u.email = :email";
+
+        $result = $this->conn->query($query, [':email' => $email]);
+        $user = $result->fetch();
+        
+        if($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+        return false;
+    }
+
 }
