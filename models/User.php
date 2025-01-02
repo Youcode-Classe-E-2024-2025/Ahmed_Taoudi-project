@@ -113,5 +113,13 @@ class User {
         }
         return false;
     }
+    public function getProjects() {
+        $query = "SELECT p.*, up.joined_at
+                FROM projects p
+                JOIN user_projects up ON p.id = up.project_id
+                WHERE up.user_id = :user_id";
+
+        return $this->conn->query($query, [':user_id' => $this->id]);
+    }
 
 }
