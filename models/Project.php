@@ -193,4 +193,17 @@ class Project {
 
         return $this->conn->query($query, [':project_id' => $this->id]);
     }
+
+    public function toArray() {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'start_date' => $this->getStartDate(),
+            'end_date' => $this->getEndDate(),
+            'status' => $this->getStatus(),
+            'created_by' => $this->getCreatedBy(),
+            'created_at' => $this->getCreatedAt()
+        ];
+    }
 }
