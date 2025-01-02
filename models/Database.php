@@ -1,5 +1,5 @@
 <?php
-require_once("assets/configDB.php");
+require_once("config/configDB.php");
 define('HOST', $host);
 define('PORT', $port);
 define('DBNAME', $dbname);
