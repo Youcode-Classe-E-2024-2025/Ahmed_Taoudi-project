@@ -79,5 +79,53 @@ class Task {
         } else {
             $this->due_date = date('Y-m-d', strtotime($date));
         }
-    }    
+    } 
+    
+    
+    // create
+    public function create() {
+        // Start transaction
+        $this->conn->connection->beginTransaction();
+
+        try {
+            
+            $query = "INSERT INTO " . $this->table . " 
+                    (title, description, project_id, status, due_date)
+                    VALUES 
+                    (:title, :description, :project_id, :status, :due_date)";
+
+            $params = [
+                ':title' => $this->title,
+                ':description' => $this->description,
+                ':project_id' => $this->project_id,
+                ':status' => $this->status,
+                ':due_date' => $this->due_date
+            ];
+
+            $stmt = $this->conn->query($query, $params);
+            $this->id = $this->conn->lastInsertId();
+
+            // Assign users 
+            if (!empty($this->assigned_users)) {
+                $query = "INSERT INTO task_users (task_id, user_id) 
+                        VALUES (:task_id, :user_id)";
+                
+                foreach ($this->assigned_users as $user_id) {
+                    $params = [
+                        ':task_id' => $this->id,
+                        ':user_id' => $user_id
+                    ];
+                    $this->conn->query($query, $params);
+                }
+            }
+
+            // Commit transaction
+            $this->conn->connection->commit();
+            return true;
+        } catch (Exception $e) {
+            // Rollback
+            $this->conn->connection->rollBack();
+            return false;
+        }
+    }
 }
