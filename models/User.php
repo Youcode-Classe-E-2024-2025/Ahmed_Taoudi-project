@@ -47,4 +47,20 @@ class User {
    public function setRoleId($role_id) {
        $this->role_id = $role_id; 
    }
+   //create
+   public function create() {
+    $query = "INSERT INTO " . $this->table . " 
+            (name, email, password, role_id)
+            VALUES 
+            (:name, :email, :password, :role_id)";
+
+    $params = [
+        ':name' => $this->name,
+        ':email' => $this->email,
+        ':password' => password_hash($this->password, PASSWORD_DEFAULT),
+        ':role_id' => $this->role_id
+    ];
+
+    return $this->conn->query($query, $params);
+}
 }
