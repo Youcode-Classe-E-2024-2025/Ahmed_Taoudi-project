@@ -87,4 +87,24 @@ class Project {
     public function setCreatedBy($user_id) {
         $this->created_by = $user_id ;
     }
+
+    // create
+    public function create() {
+        $query = "INSERT INTO " . $this->table . " 
+                (name, description, start_date, end_date, status, created_by)
+                VALUES 
+                (:name, :description, :start_date, :end_date, :status, :created_by)";
+
+        $params = [
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':start_date' => $this->start_date,
+            ':end_date' => $this->end_date,
+            ':status' => $this->status ?? 'planning',
+            ':created_by' => $this->created_by
+        ];
+
+       $this->conn->query($query, $params);
+    // TODO  :  return id 
+    }
 }
