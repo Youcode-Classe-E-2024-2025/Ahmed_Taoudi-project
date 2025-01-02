@@ -169,4 +169,12 @@ class Task {
         $query = "DELETE FROM task_users WHERE task_id = :task_id";
         return $this->conn->query($query, [':task_id' => $this->id]);
     }
+    public function getAssignedUsersDetails() {
+        $query = "SELECT u.* 
+                FROM users u
+                JOIN task_users tu ON u.id = tu.user_id
+                WHERE tu.task_id = :task_id";
+
+        return $this->conn->query($query, [':task_id' => $this->id]);
+    }
 }
