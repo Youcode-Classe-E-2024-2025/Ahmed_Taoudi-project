@@ -121,5 +121,15 @@ class User {
 
         return $this->conn->query($query, [':user_id' => $this->id]);
     }
+    
+    public function getTasks() {
+        $query = "SELECT t.*, p.name as project_name
+                FROM tasks t
+                JOIN task_users tu ON t.id = tu.task_id
+                LEFT JOIN projects p ON t.project_id = p.id
+                WHERE tu.user_id = :user_id";
+
+        return $this->conn->query($query, [':user_id' => $this->id]);
+    }
 
 }
