@@ -4,6 +4,7 @@ require "assets/helper/fonctions.php";
 require_once "core/Router.php";
 require_once "models/Database.php";
 
+// dd("eeeeee");
 // CSRF
 if (empty($_SESSION['csrf_token'])) { 
 
@@ -12,14 +13,15 @@ if (empty($_SESSION['csrf_token'])) {
 
 $db = new Database();
 // 
+
 if(isset($_POST['createdb'])){ 
 
     if(isset($_POST['checkbox']) && $_POST['checkbox'] == 'on' ){
-        
         $db->createDatabase(DBNAME,true);
+        // dd(33);
     }else{
-        
         $db->createDatabase(DBNAME,false);
+        // dd(22);
     }
     
 }

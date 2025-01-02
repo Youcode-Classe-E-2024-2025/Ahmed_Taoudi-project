@@ -6,7 +6,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <title>Document</title>
+    <title>TeamFlow </title>
 </head>
 <body>
 
@@ -24,7 +24,7 @@
                             TeamFlow est une solution complète de gestion de projet qui aide les équipes à collaborer efficacement, suivre les progrès et atteindre leurs objectifs.
                         </p>
                         <div class="mt-10 flex items-center gap-x-6">
-                            <a href="/register.php"
+                            <a href="/register"
                                 class="rounded-md bg-emerald-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
                                 Commencer gratuitement
                             </a>
@@ -102,7 +102,7 @@
                     </p>
                 </div>
 
-                <div class="relative pl-16">
+                <!-- <div class="relative pl-16">
                     <div class="text-emerald-600 absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
                         <i class="ri-notification-line text-xl"></i>
                     </div>
@@ -112,7 +112,7 @@
                     <p class="mt-2 text-base leading-7 text-gray-600">
                         Restez informé des mises à jour importantes avec des notifications personnalisables.
                     </p>
-                </div>
+                </div> -->
 
                 <div class="relative pl-16">
                     <div class="text-emerald-600 absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
@@ -142,11 +142,11 @@
                 Rejoignez les milliers d'équipes qui utilisent déjà TeamFlow pour gérer leurs projets efficacement.
             </p>
             <div class="mt-10 flex items-center justify-center gap-x-6">
-                <a href="/register.php"
+                <a href="/register"
                     class="rounded-md bg-emerald-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
                     Commencer gratuitement
                 </a>
-                <a href="/login.php" class="text-sm font-semibold leading-6 text-gray-900">
+                <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">
                     Se connecter <span aria-hidden="true">→</span>
                 </a>
             </div>

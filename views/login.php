@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -40,6 +40,9 @@
             <form class="mt-8 space-y-6" action="/login" method="POST">
                 <div class="rounded-md shadow-sm space-y-4">
                     <div>
+                         <!-- CSRF -->
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
+                        
                         <label for="email" class="block text-sm font-medium text-gray-700">
                             Adresse email
                         </label>

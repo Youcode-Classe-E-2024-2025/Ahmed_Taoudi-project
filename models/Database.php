@@ -30,7 +30,8 @@ class Database
         } catch (PDOException $e) {
 
             if ($e->getCode() == 1049) {        
-                require_once("views/support/createDB.php"); 
+                // require_once("views/support/createDB.php"); 
+                header('location: views/support/createDB.php');
 
             } else {
                 // Log the error instead of displaying it

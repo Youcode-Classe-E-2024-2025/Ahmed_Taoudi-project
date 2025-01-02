@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -40,6 +40,9 @@
             <form class="mt-8 space-y-6" action="/register" method="POST">
                 <div class="rounded-md shadow-sm space-y-4">
                     <div>
+                         <!-- CSRF -->
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
+                        
                         <label for="name" class="block text-sm font-medium text-gray-700">
                             Nom complet
                         </label>
@@ -62,7 +65,7 @@
                         <input id="password" name="password" type="password" required
                             class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm"
                             placeholder="••••••••">
-                        <p class="mt-1 text-xs text-gray-500">
+                        <p class="mt-1 text-xs text-red-500 hidden">
                             Au moins 8 caractères, avec des lettres majuscules, minuscules et des chiffres
                         </p>
                     </div>
@@ -89,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="flex items-center">
+                <!-- <div class="flex items-center">
                     <input id="terms" name="terms" type="checkbox" required
                         class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
                     <label for="terms" class="ml-2 block text-sm text-gray-900">
@@ -102,7 +105,7 @@
                             politique de confidentialité
                         </a>
                     </label>
-                </div>
+                </div> -->
 
                 <div>
                     <button type="submit"
