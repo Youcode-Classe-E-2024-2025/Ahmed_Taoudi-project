@@ -142,4 +142,16 @@ class Task {
         return $this->conn->query($query, $params);
     }
 
+    public function assignUser($user_id) {
+        $query = "INSERT INTO task_users (task_id, user_id)
+                VALUES (:task_id, :user_id)";
+
+        $params = [
+            ':task_id' => $this->id,
+            ':user_id' => $user_id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
+
 }
