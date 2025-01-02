@@ -169,7 +169,7 @@ class Project {
 
         return $this->conn->query($query, $params);
     }
-    
+
     public function removeTeamMember($user_id) {
         $query = "DELETE FROM user_projects 
                 WHERE project_id = :project_id AND user_id = :user_id";
@@ -180,5 +180,17 @@ class Project {
         ];
 
         return $this->conn->query($query, $params);
+    }
+
+    public function getTasks() {
+        $query = "SELECT t.*, 
+                        GROUP_CONCAT(u.name) as assignee_names
+                FROM tasks t
+                LEFT JOIN task_users tu ON t.id = tu.task_id
+                LEFT JOIN users u ON tu.user_id = u.id
+                WHERE t.project_id = :project_id
+                GROUP BY t.id";
+
+        return $this->conn->query($query, [':project_id' => $this->id]);
     }
 }
