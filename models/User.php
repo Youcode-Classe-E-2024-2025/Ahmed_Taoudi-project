@@ -49,18 +49,32 @@ class User {
    }
    //create
    public function create() {
-    $query = "INSERT INTO " . $this->table . " 
-            (name, email, password, role_id)
-            VALUES 
-            (:name, :email, :password, :role_id)";
+        $query = "INSERT INTO " . $this->table . " 
+                (name, email, password, role_id)
+                VALUES 
+                (:name, :email, :password, :role_id)";
 
-    $params = [
-        ':name' => $this->name,
-        ':email' => $this->email,
-        ':password' => password_hash($this->password, PASSWORD_DEFAULT),
-        ':role_id' => $this->role_id
-    ];
+        $params = [
+            ':name' => $this->name,
+            ':email' => $this->email,
+            ':password' => password_hash($this->password, PASSWORD_DEFAULT),
+            ':role_id' => $this->role_id
+        ];
 
     return $this->conn->query($query, $params);
-}
+    }
+    
+    public function read($id = null) {
+        $query = "SELECT u.*, r.name as role_name 
+                FROM " . $this->table . " u
+                LEFT JOIN roles r ON u.role_id = r.id";
+        
+        $params = [];
+        if($id) {
+            $query .= " WHERE u.id = :id";
+            $params[':id'] = $id;
+        }
+        
+        return $this->conn->query($query, $params);
+    }
 }
