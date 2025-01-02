@@ -169,4 +169,16 @@ class Project {
 
         return $this->conn->query($query, $params);
     }
+    
+    public function removeTeamMember($user_id) {
+        $query = "DELETE FROM user_projects 
+                WHERE project_id = :project_id AND user_id = :user_id";
+
+        $params = [
+            ':project_id' => $this->id,
+            ':user_id' => $user_id
+        ];
+
+        return $this->conn->query($query, $params);
+    }
 }
