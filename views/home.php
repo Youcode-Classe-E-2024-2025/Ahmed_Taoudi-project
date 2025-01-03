@@ -9,7 +9,7 @@
     <title>TeamFlow </title>
 </head>
 <body>
-
+<?php require_once "views/partials/navbar.php";?>
 <div class="bg-white">
     <!-- Hero section -->
     <div class="relative isolate overflow-hidden bg-gradient-to-b from-emerald-100/20">

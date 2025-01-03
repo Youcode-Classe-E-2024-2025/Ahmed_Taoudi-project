@@ -4,6 +4,7 @@
 $router->register('/', 'HomeController', 'index');
 
 // User routes
+// $router->register('/dashboard', 'AuthController', 'login');
 $router->register('/login', 'AuthController', 'login');
 $router->register('/logout', 'AuthController', 'logout');
 $router->register('/register', 'AuthController', 'register');

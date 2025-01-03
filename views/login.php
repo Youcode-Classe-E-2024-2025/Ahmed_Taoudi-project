@@ -9,7 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<?php require_once "views/partials/navbar.php" ;?>
+
+    <div class="min-h-screen flex items-center mt-24 justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <h1 class="text-3xl font-bold text-emerald-600">TeamFlow</h1>
@@ -36,6 +38,21 @@
                 </div>
             </div>
             <?php endif; ?>
+            <?php if (isset($_SESSION['message'])): ?>
+            <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="ri-error-warning-line text-green-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-green-700">
+                            <?php echo htmlspecialchars($_SESSION['message']); unset($_SESSION['message']); ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            
 
             <form class="mt-8 space-y-6" action="/login" method="POST">
                 <div class="rounded-md shadow-sm space-y-4">

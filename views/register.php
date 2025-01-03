@@ -9,7 +9,10 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+    <?php require_once "views/partials/navbar.php" ;?>
+
+    <div class="min-h-screen flex items-center mt-24 justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <h1 class="text-3xl font-bold text-emerald-600">TeamFlow</h1>

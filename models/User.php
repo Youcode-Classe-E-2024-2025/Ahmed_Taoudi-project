@@ -132,4 +132,14 @@ class User {
         return $this->conn->query($query, [':user_id' => $this->id]);
     }
 
+    public  function isIndatabase($email)
+    {
+        $query = "select * from ". $this->table ." where email = :email" ;
+       $result = $this->conn->query($query
+          ,
+          ['email' => $email]
+       );
+       return $result->rowCount();
+    }
+
 }
