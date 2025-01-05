@@ -29,6 +29,8 @@ class Router {
             require_once $controllerPath;
             $controller = new $controller($this->db);
             return $controller->$action();
+        }else{
+            return require_once "views/errors/404.php";
         }
         
 
