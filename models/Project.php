@@ -160,6 +160,14 @@ class Project {
 
         return $this->conn->query($query, [':project_id' => $this->id]);
     }
+    public function getAvailableUsers() {
+        $query = "SELECT u.*, up.joined_at
+                FROM users u
+                LEFT JOIN user_projects up ON u.id = up.user_id
+                WHERE up.project_id IS NULL";
+
+        return $this->conn->query($query);
+    }
 
     public function addTeamMember($user_id) {
         $query = "INSERT INTO user_projects (project_id, user_id)
@@ -218,6 +226,45 @@ class Project {
                 WHERE project_id = :project_id";
 
         return $this->conn->query($query, [':project_id' => $this->id])->fetch();
+    }
+
+    public function isUserInProject($userId, $projectId) {
+        $query = "SELECT COUNT(*) FROM user_projects 
+                 WHERE user_id = :user_id AND project_id = :project_id";
+        $result = $this->conn->query($query, [
+            ':user_id' => $userId,
+            ':project_id' => $projectId
+        ])->fetchColumn();
+        
+        return $result > 0;
+    }
+
+    public function addMember($userId, $projectId) {
+        try {
+            $this->conn->connection->beginTransaction();
+            
+            $query = "INSERT INTO user_projects (user_id, project_id) 
+                     VALUES (:user_id, :project_id)";
+            
+            $result = $this->conn->query($query, [
+                ':user_id' => $userId,
+                ':project_id' => $projectId
+            ]);
+            
+            if ($result) {
+                $this->conn->connection->commit();
+                return true;
+            }
+            
+            $this->conn->connection->rollback();
+            return false;
+        } catch (Exception $e) {
+            if ($this->conn->connection->inTransaction()) {
+                $this->conn->connection->rollback();
+            }
+            error_log('Error adding member to project: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function toArray() {

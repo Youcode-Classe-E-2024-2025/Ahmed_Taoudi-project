@@ -18,6 +18,7 @@ $router->register('/projects', 'ProjectController', 'index');
 $router->register('/project/create', 'ProjectController', 'create');
 $router->register('/project/edit', 'ProjectController', 'edit');
 $router->register('/project/delete', 'ProjectController', 'delete');
+$router->register('/projects/addMember', 'ProjectController', 'addMember');
 
 // Task routes
 $router->register('/tasks', 'TaskController', 'index');

@@ -64,9 +64,9 @@
 
         <!-- Right Column - Team Members -->
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">Équipe</h2>
-                <button class="text-sm text-indigo-600 hover:text-indigo-700">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-medium text-gray-900">Membres de l'équipe</h2>
+                <button onclick="openAddMemberModal()" class="text-sm text-indigo-600 hover:text-indigo-700">
                     <i class="ri-user-add-line mr-1"></i> Ajouter
                 </button>
             </div>
@@ -183,6 +183,77 @@
     </script>
 
 </div>
+
+<!-- Add Member Modal -->
+<div id="add-member-modal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/projects/addMember" method="POST">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Ajouter des membres à l'équipe</h3>
+                            
+                            <?php if (empty($availableUsers)): ?>
+                                <p class="text-sm text-gray-500">Tous les utilisateurs sont déjà membres de ce projet.</p>
+                            <?php else: ?>
+                                <div class="mt-2 max-h-60 overflow-y-auto">
+                                    <div class="space-y-2">
+                                        <?php foreach ($availableUsers as $user): ?>
+                                            <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                                                <input type="checkbox" 
+                                                       id="user-<?= $user['id'] ?>" 
+                                                       name="user_ids[]" 
+                                                       value="<?= $user['id'] ?>"
+                                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                                <label for="user-<?= $user['id'] ?>" class="flex items-center flex-1 cursor-pointer">
+                                                    <div class="flex items-center space-x-3">
+                                                        <img class="h-8 w-8 rounded-full" 
+                                                             src="https://ui-avatars.com/api/?name=<?= urlencode($user['name']) ?>" 
+                                                             alt="<?= htmlspecialchars($user['name']) ?>">
+                                                        <div>
+                                                            <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($user['name']) ?></div>
+                                                            <div class="text-sm text-gray-500"><?= htmlspecialchars($user['email']) ?></div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+                
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <?php if (!empty($availableUsers)): ?>
+                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Ajouter
+                        </button>
+                    <?php endif; ?>
+                    <button type="button" onclick="closeModal('add-member-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 <?= !empty($availableUsers) ? 'sm:ml-3' : '' ?> sm:w-auto sm:text-sm">
+                        <?= empty($availableUsers) ? 'Fermer' : 'Annuler' ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openAddMemberModal() {
+    document.getElementById('add-member-modal').classList.remove('hidden');
+}
+</script>
+
 <div id="confirm-delete-modal" class="hidden fixed z-10 inset-0 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity">
@@ -215,8 +286,9 @@
         </div>
     </div>
 </div>
+
 <script>
-    function confirmDelete(id) {
+function confirmDelete(id) {
        document.getElementById('confirm-delete-modal').classList.remove('hidden');
        document.getElementById('delete-task-id').value = id;
 
