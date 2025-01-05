@@ -45,9 +45,19 @@ class Task {
         return $this->created_at;
     }
 
-    public function getAssignedUsers() {
-        return $this->assigned_users;
+    public function getAssignedUserIds() {
+        $query = "SELECT user_id FROM task_users WHERE task_id = :task_id";
+        $result = $this->conn->query($query, [':task_id' => $this->id])->fetchAll(PDO::FETCH_COLUMN);
+        return $result;
     }
+    
+    public function getAssignedUsers() {
+        $query = "SELECT u.* FROM users u 
+                 JOIN task_users tu ON u.id = tu.user_id 
+                 WHERE tu.task_id = :task_id";
+        return $this->conn->query($query, [':task_id' => $this->id]);
+    }
+
 
     // Setters
     public function setId($id) {
@@ -81,50 +91,51 @@ class Task {
         }
     } 
 
-    
+
+
+    public function setAssignedUsers($assigned_users) {
+        $this->assigned_users = $assigned_users;
+    }
+
     // create
     public function create() {
-        // Start transaction
         $this->conn->connection->beginTransaction();
-
         try {
             
             $query = "INSERT INTO " . $this->table . " 
-                    (title, description, project_id, status, due_date)
+                    (title, description, status, due_date, project_id) 
                     VALUES 
-                    (:title, :description, :project_id, :status, :due_date)";
-
-            $params = [
+                    (:title, :description, :status, :due_date, :project_id)";
+            
+            $result = $this->conn->query($query, [
                 ':title' => $this->title,
                 ':description' => $this->description,
-                ':project_id' => $this->project_id,
                 ':status' => $this->status,
-                ':due_date' => $this->due_date
-            ];
-
-            $stmt = $this->conn->query($query, $params);
-            $this->id = $this->conn->lastInsertId();
-
-            // Assign users 
-            if (!empty($this->assigned_users)) {
-                $query = "INSERT INTO task_users (task_id, user_id) 
-                        VALUES (:task_id, :user_id)";
+                ':due_date' => $this->due_date,
+                ':project_id' => $this->project_id
+            ]);
+            
+            if ($result) {
+                $this->id = $this->conn->lastInsertId();
                 
-                foreach ($this->assigned_users as $user_id) {
-                    $params = [
-                        ':task_id' => $this->id,
-                        ':user_id' => $user_id
-                    ];
-                    $this->conn->query($query, $params);
+                // Handle user assignments
+                if (!empty($this->assigned_users)) {
+                    $this->assignUsers($this->assigned_users);
                 }
+                
+                $this->conn->connection->commit();
+                return true;
             }
-
-            // Commit transaction
-            $this->conn->connection->commit();
-            return true;
+            
+            if ($this->conn->connection->inTransaction()) {
+                $this->conn->connection->rollback();
+            }
+            return false;
         } catch (Exception $e) {
-            // Rollback
-            $this->conn->connection->rollBack();
+            if ($this->conn->connection->inTransaction()) {
+                $this->conn->connection->rollback();
+            }
+            error_log('Error during task creation: ' . $e->getMessage());
             return false;
         }
     }
@@ -162,75 +173,63 @@ class Task {
         return $this->conn->query($query, [':id' => $this->id]);
     }
 
-    public function assignUser($user_id) {
-        $query = "INSERT INTO task_users (task_id, user_id)
-                VALUES (:task_id, :user_id)";
+    public function assignUsers($user_ids) {
+    
+            // First remove all existing assignments
+            $query = "DELETE FROM task_users WHERE task_id = :task_id";
+            $this->conn->query($query, [':task_id' => $this->id]);
+            
+            // Then add new assignments
+            if (!empty($user_ids)) {
+                $query = "INSERT INTO task_users (task_id, user_id) VALUES (:task_id, :user_id)";
+                foreach ($user_ids as $user_id) {
+                    $this->conn->query($query, [
+                        ':task_id' => $this->id,
+                        ':user_id' => $user_id
+                    ]);
+                }
+            }
 
-        $params = [
-            ':task_id' => $this->id,
-            ':user_id' => $user_id
-        ];
-
-        return $this->conn->query($query, $params);
-    }
-
-    public function removeUser($user_id) {
-        $query = "DELETE FROM task_users 
-                WHERE task_id = :task_id AND user_id = :user_id";
-
-        $params = [
-            ':task_id' => $this->id,
-            ':user_id' => $user_id
-        ];
-
-        return $this->conn->query($query, $params);
-    }
-    private function removeAllAssignedUsers() {
-        $query = "DELETE FROM task_users WHERE task_id = :task_id";
-        return $this->conn->query($query, [':task_id' => $this->id]);
-    }
-    public function getAssignedUsersDetails() {
-        $query = "SELECT u.* 
-                FROM users u
-                JOIN task_users tu ON u.id = tu.user_id
-                WHERE tu.task_id = :task_id";
-
-        return $this->conn->query($query, [':task_id' => $this->id]);
+        
     }
 
     public function update() {
         $this->conn->connection->beginTransaction();
-
         try {
+            
             $query = "UPDATE " . $this->table . " 
                     SET title = :title, 
                         description = :description, 
                         status = :status, 
-                        due_date = :due_date 
+                        due_date = :due_date
                     WHERE id = :id";
 
-            $params = [
-                ':id' => $this->id,
+            $result = $this->conn->query($query, [
                 ':title' => $this->title,
                 ':description' => $this->description,
                 ':status' => $this->status,
-                ':due_date' => $this->due_date
-            ];
+                ':due_date' => $this->due_date,
+                ':id' => $this->id
+            ]);
 
-            $this->conn->query($query, $params);
-            
-            // Handle assigned users if they exist
-            if (!empty($this->assigned_users)) {
-                $this->removeAllAssignedUsers();
-                foreach ($this->assigned_users as $user_id) {
-                    $this->assignUser($user_id);
+            if ($result) {
+                // Handle user assignments
+                if (!empty($this->assigned_users)) {
+                    $this->assignUsers($this->assigned_users);
                 }
+                
+                $this->conn->connection->commit();
+                return true;
             }
-
-            $this->conn->connection->commit();
-            return true;
+            
+            if ($this->conn->connection->inTransaction()) {
+                $this->conn->connection->rollback();
+            }
+            return false;
         } catch (Exception $e) {
-            $this->conn->connection->rollBack();
+            if ($this->conn->connection->inTransaction()) {
+                $this->conn->connection->rollback();
+            }
             return false;
         }
     }

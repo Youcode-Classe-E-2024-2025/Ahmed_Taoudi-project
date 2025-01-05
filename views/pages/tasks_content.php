@@ -347,11 +347,11 @@
             membersContainer.innerHTML = ''; // Clear existing members
             
             if (task.assigned_users && task.assigned_users.length > 0) {
-                task.assigned_users.forEach(userId => {
+                task.assigned_users.forEach(member => {
                     const memberElement = document.createElement('div');
                     memberElement.className = 'flex items-center space-x-3 p-2 rounded-lg bg-gray-50';
                     
-                    const member = findMemberById(userId);
+                    // const member = findMemberById(userId);
                     if (member) {
                         memberElement.innerHTML = `
                             <img class="h-8 w-8 rounded-full" 
@@ -395,10 +395,5 @@
         return colors[status] || 'bg-gray-100 text-gray-800';
     }
 
-    function findMemberById(userId) {
-        // This function should return the member data from your team array
-        // You'll need to make this data available to the JavaScript
-        const team = <?= json_encode($team ?? []) ?>;
-        return team.find(member => member.id === userId);
-    }
+
 </script>

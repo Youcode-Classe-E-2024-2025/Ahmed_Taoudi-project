@@ -120,31 +120,32 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                             <textarea name="description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
                         </div>
-                        <!-- project id -->
-                        <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
-                        <!-- <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Assigné à</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="">Sélectionner un membre</option>
-                            <option value="1">John Doe</option>
-                            <option value="2">Jane Smith</option>
-                            <option value="3">Mike Brown</option>
-                        </select>
-                    </div> -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date d'échéance</label>
                             <input name="due_date" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
-                        <!-- <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="">Sélectionner une catégorie</option>
-                            <option value="frontend">Frontend</option>
-                            <option value="backend">Backend</option>
-                            <option value="design">Design</option>
-                            <option value="qa">QA</option>
-                        </select>
-                    </div> -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Assigner à</label>
+                            <div class="space-y-2 max-h-48 overflow-y-auto p-3 border border-gray-300 rounded-md">
+                                <?php foreach ($team as $member): ?>
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" 
+                                           id="member-<?= $member['id'] ?>" 
+                                           name="assigned_users[]" 
+                                           value="<?= $member['id'] ?>"
+                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    <label for="member-<?= $member['id'] ?>" class="flex items-center space-x-3 cursor-pointer">
+                                        <img class="h-8 w-8 rounded-full" 
+                                             src="https://ui-avatars.com/api/?name=<?= urlencode($member['name']) ?>" 
+                                             alt="<?= htmlspecialchars($member['name']) ?>">
+                                        <span class="text-sm text-gray-900"><?= htmlspecialchars($member['name']) ?></span>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <!-- project id -->
+                        <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
                     </div>
                     <div class="flex justify-end gap-3 mt-4">
                         <button type="button" class="close-modal px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
@@ -220,6 +221,7 @@
        document.getElementById('delete-task-id').value = id;
 
     }
+
     
     
 
@@ -264,6 +266,27 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Date d'échéance</label>
                                 <input id="edit-task-due-date" name="due_date" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Assigner à</label>
+                                <div class="space-y-2 max-h-48 overflow-y-auto p-3 border border-gray-300 rounded-md">
+                                    <?php foreach ($team as $member): ?>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="checkbox" 
+                                               id="edit-member-<?= $member['id'] ?>" 
+                                               name="assigned_users[]" 
+                                               value="<?= $member['id'] ?>"
+                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                        <label for="edit-member-<?= $member['id'] ?>" class="flex items-center space-x-3 cursor-pointer">
+                                            <img class="h-8 w-8 rounded-full" 
+                                                 src="https://ui-avatars.com/api/?name=<?= urlencode($member['name']) ?>" 
+                                                 alt="<?= htmlspecialchars($member['name']) ?>">
+                                            <span class="text-sm text-gray-900"><?= htmlspecialchars($member['name']) ?></span>
+                                        </label>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="flex justify-end gap-3 mt-4">
@@ -301,6 +324,12 @@ function editTask(taskId) {
         document.getElementById('edit-task-status').value = task.status;
         document.getElementById('edit-task-due-date').value = task.due_date;
         
+        // Handle assigned users checkboxes
+        const assignedUsers = task.assigned_users.map(user => user.id) || [];
+        document.querySelectorAll('input[name="assigned_users[]"]').forEach(checkbox => {
+            checkbox.checked = assignedUsers.includes(parseInt(checkbox.value));
+        });
+        
         // Show the modal
         document.getElementById('edit-task-modal').classList.remove('hidden');
     })
@@ -309,4 +338,30 @@ function editTask(taskId) {
         alert('Une erreur est survenue lors de la récupération des détails de la tâche');
     });
 }
+
+// Add hover and active effects to member selection
+document.addEventListener('DOMContentLoaded', function() {
+    const memberLabels = document.querySelectorAll('label[for^="member-"], label[for^="edit-member-"]');
+    memberLabels.forEach(label => {
+        label.addEventListener('mouseenter', function() {
+            this.classList.add('bg-gray-50');
+        });
+        label.addEventListener('mouseleave', function() {
+            this.classList.remove('bg-gray-50');
+        });
+    });
+
+    // Add active effect for checkboxes
+    const checkboxes = document.querySelectorAll('input[name="assigned_users[]"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const label = document.querySelector(`label[for="${this.id}"]`);
+            if (this.checked) {
+                label.classList.add('bg-indigo-50');
+            } else {
+                label.classList.remove('bg-indigo-50');
+            }
+        });
+    });
+});
 </script>
