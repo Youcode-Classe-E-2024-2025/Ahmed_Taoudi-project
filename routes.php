@@ -2,6 +2,8 @@
 
 // Register routes
 $router->register('/', 'HomeController', 'index');
+$router->register('/home', 'HomeController', 'index');
+$router->register('/home/getChartData', 'HomeController', 'getChartData');
 
 // User routes
 // $router->register('/dashboard', 'AuthController', 'login');
@@ -19,6 +21,7 @@ $router->register('/project/create', 'ProjectController', 'create');
 $router->register('/project/edit', 'ProjectController', 'edit');
 $router->register('/project/delete', 'ProjectController', 'delete');
 $router->register('/projects/addMember', 'ProjectController', 'addMember');
+$router->register('/project/updateVisibility', 'ProjectController', 'updateVisibility');
 
 // Task routes
 $router->register('/tasks', 'TaskController', 'index');

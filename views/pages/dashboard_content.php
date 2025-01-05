@@ -136,67 +136,179 @@
     </div>
 </div>
 
-<!-- Quick Actions -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <!-- Tasks Due Today -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Tasks Due Today</h2>
-        </div>
-        <div class="p-4">
-            <ul class="divide-y divide-gray-200">
-                <li class="py-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 rounded border-gray-300">
-                            <span class="ml-3 text-sm text-gray-900">Update homepage design</span>
-                        </div>
-                        <span class="text-sm text-red-600">2 hours left</span>
-                    </div>
-                </li>
-                <li class="py-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 rounded border-gray-300">
-                            <span class="ml-3 text-sm text-gray-900">Review client feedback</span>
-                        </div>
-                        <span class="text-sm text-red-600">5 hours left</span>
-                    </div>
-                </li>
-            </ul>
+
+<!--  1 add a chart for project progress -->
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+    <!-- Project Progress Chart -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Project Progress</h3>
+        <div class="relative h-[300px]">
+            <canvas id="projectProgressChart"></canvas>
         </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Recent Activity</h2>
+<!--  2 add a chart for team productivity -->
+    <!-- Team Productivity Chart -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Team Productivity</h3>
+        <div class="relative h-[300px]">
+            <canvas id="teamProductivityChart"></canvas>
         </div>
-        <div class="p-4">
-            <ul class="divide-y divide-gray-200">
-                <li class="py-3">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=John+Doe" alt="">
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-900">John Doe completed task <span class="font-medium">Update API documentation</span></p>
-                            <p class="text-sm text-gray-500">2 hours ago</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="py-3">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=Jane+Smith" alt="">
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-900">Jane Smith created new project <span class="font-medium">Mobile App v2</span></p>
-                            <p class="text-sm text-gray-500">5 hours ago</p>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+    </div>
+
+<!--  3 add a chart for task completion -->
+    <!-- Task Completion Chart -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Task Completion</h3>
+        <div class="relative h-[300px]">
+            <canvas id="taskCompletionChart"></canvas>
         </div>
     </div>
 </div>
+
+<!-- Chart.js Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Function to fetch chart data
+async function fetchChartData(chartType) {
+    try {
+        const response = await fetch('/home/getChartData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `chartType=${chartType}`
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching chart data:', error);
+        return null;
+    }
+}
+
+// Initialize Project Progress Chart
+async function initProjectProgressChart() {
+    const data = await fetchChartData('projectProgress');
+    if (!data) return;
+
+    const ctx = document.getElementById('projectProgressChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                data: data.data,
+                backgroundColor: ['#10B981', '#FBBF24', '#EF4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+// Initialize Team Productivity Chart
+async function initTeamProductivityChart() {
+    const data = await fetchChartData('teamProductivity');
+    if (!data) return;
+
+    const ctx = document.getElementById('teamProductivityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Tasks Completed',
+                data: data.data,
+                borderColor: '#6366F1',
+                tension: 0.4,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Initialize Task Completion Chart
+async function initTaskCompletionChart() {
+    const data = await fetchChartData('taskCompletion');
+    if (!data) return;
+
+    const ctx = document.getElementById('taskCompletionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Completed Tasks',
+                data: data.data,
+                backgroundColor: '#60A5FA',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Initialize all charts
+document.addEventListener('DOMContentLoaded', () => {
+    initProjectProgressChart();
+    initTeamProductivityChart();
+    initTaskCompletionChart();
+});
+</script>

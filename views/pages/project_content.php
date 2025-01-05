@@ -32,7 +32,17 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Left Column -->
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 space-y-4">
-            <h2 class="text-lg font-semibold text-gray-900">Détails du projet</h2>
+        <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Détails du projet</h2>
+                <form action="/project/updateVisibility" method="POST" class="inline">
+                    <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+                    <input type="hidden" name="visibility" value="<?= $project['visibility'] === 'public' ? 'private' : 'public' ?>">
+                    <button type="submit" class="flex items-center text-sm <?= $project['visibility'] === 'public' ? 'text-green-600 hover:text-green-700' : 'text-gray-600 hover:text-gray-700' ?>">
+                        <i class="ri-<?= $project['visibility'] === 'public' ? 'eye-line' : 'eye-off-line' ?> mr-1"></i>
+                        <?= $project['visibility'] === 'public' ? 'Public' : 'Privé' ?>
+                    </button>
+                </form>
+            </div>
 
             <div class="space-y-3">
                 <div>
