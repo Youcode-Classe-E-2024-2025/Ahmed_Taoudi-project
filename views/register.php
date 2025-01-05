@@ -80,7 +80,7 @@
                             class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm"
                             placeholder="••••••••">
                     </div>
-                    <div>
+                    <!-- <div>
                         <label for="role" class="block text-sm font-medium text-gray-700">
                             Rôle dans l'équipe
                         </label>
@@ -93,7 +93,7 @@
                             <option value="marketing">Marketing</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="flex items-center">
                     <input id="terms" name="terms" type="checkbox" required
@@ -121,7 +121,7 @@
                 </div>
             </form>
 
-            <div class="mt-6">
+            <!-- <div class="mt-6">
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-gray-300"></div>
@@ -149,7 +149,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </body>

@@ -228,55 +228,21 @@ class Project {
         return $this->conn->query($query, [':project_id' => $this->id])->fetch();
     }
 
-    public function isUserInProject($userId, $projectId) {
-        $query = "SELECT COUNT(*) FROM user_projects 
-                 WHERE user_id = :user_id AND project_id = :project_id";
-        $result = $this->conn->query($query, [
-            ':user_id' => $userId,
+
+    public function updateVisibility($projectId, $visibility) {
+        $query = "UPDATE projects SET visibility = :visibility WHERE id = :project_id";
+        return $this->conn->query($query, [
+            ':visibility' => $visibility,
             ':project_id' => $projectId
-        ])->fetchColumn();
-        
-        return $result > 0;
+        ]);
     }
 
-    public function addMember($userId, $projectId) {
-        try {
-            $this->conn->connection->beginTransaction();
-            
-            $query = "INSERT INTO user_projects (user_id, project_id) 
-                     VALUES (:user_id, :project_id)";
-            
-            $result = $this->conn->query($query, [
-                ':user_id' => $userId,
-                ':project_id' => $projectId
-            ]);
-            
-            if ($result) {
-                $this->conn->connection->commit();
-                return true;
-            }
-            
-            $this->conn->connection->rollback();
-            return false;
-        } catch (Exception $e) {
-            if ($this->conn->connection->inTransaction()) {
-                $this->conn->connection->rollback();
-            }
-            error_log('Error adding member to project: ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    public function toArray() {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription(),
-            'start_date' => $this->getStartDate(),
-            'end_date' => $this->getEndDate(),
-            'status' => $this->getStatus(),
-            'created_by' => $this->getCreatedBy(),
-            'created_at' => $this->getCreatedAt()
-        ];
+    public function getPublicProjects() {
+        $query = "SELECT p.*, u.name as creator_name 
+                 FROM projects p 
+                 LEFT JOIN users u ON p.created_by = u.id 
+                 WHERE p.visibility = 'public'
+                 ORDER BY p.created_at DESC";
+        return $this->conn->query($query);
     }
 }

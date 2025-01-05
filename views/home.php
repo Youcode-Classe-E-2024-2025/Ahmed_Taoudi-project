@@ -36,11 +36,65 @@
                 </div>
             </div>
             <div class="mt-20 sm:mt-24 md:mx-auto md:max-w-2xl lg:mx-0 lg:mt-0 lg:w-screen">
-                <div class="shadow-xl md:rounded-3xl">
-                    <img src="assets/images/dashboard-preview.png" alt="Dashboard preview" class="w-full">
-                </div>
+                <!-- <div class="shadow-xl md:rounded-3xl"> -->
+                    <img src="assets/img/team.svg" alt="Dashboard preview" class="w-full">
+                <!-- </div> -->
             </div>
         </div>
+    </div>
+     <!--public  -->
+     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+     <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-base font-semibold leading-7 text-emerald-600">voila quelques projets public</h2>
+            <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                public projets
+            </p>
+        </div>
+            <div class="px-4 py-8 sm:px-0">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <?php foreach ($publicProjects as $project): ?>
+                        <div class="bg-white overflow-hidden shadow rounded-lg">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="ri-folder-line text-2xl text-indigo-600"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 ">
+                                                <?= htmlspecialchars($project['name']) ?>
+                                            </dt>
+                                            <dd class="flex items-center text-sm text-gray-900">
+                                                <div class="">
+                                                    <?= htmlspecialchars($project['description']) ?>
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 px-5 py-3">
+                                <div class="text-sm">
+                                    <div class="font-medium text-gray-900">
+                                        Par <?= htmlspecialchars($project['creator_name']) ?>
+                                    </div>
+                                    <div class="mt-1 text-gray-500">
+                                        Status: <span class="capitalize"><?= htmlspecialchars($project['status']) ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                
+                <?php if (empty($publicProjects)): ?>
+                    <div class="text-center py-12">
+                        <i class="ri-folder-unknow-line text-4xl text-gray-400"></i>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">Aucun projet public</h3>
+                        <p class="mt-1 text-sm text-gray-500">Il n'y a pas encore de projets publics disponibles.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
     </div>
 
     <!-- Feature section -->
@@ -102,17 +156,6 @@
                     </p>
                 </div>
 
-                <!-- <div class="relative pl-16">
-                    <div class="text-emerald-600 absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
-                        <i class="ri-notification-line text-xl"></i>
-                    </div>
-                    <h3 class="text-base font-semibold leading-7 text-gray-900">
-                        Notifications en temps réel
-                    </h3>
-                    <p class="mt-2 text-base leading-7 text-gray-600">
-                        Restez informé des mises à jour importantes avec des notifications personnalisables.
-                    </p>
-                </div> -->
 
                 <div class="relative pl-16">
                     <div class="text-emerald-600 absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
@@ -128,7 +171,7 @@
             </div>
         </div>
     </div>
-
+   
     <!-- CTA section -->
     <div class="relative isolate mt-32 px-6 py-32 sm:mt-40 sm:py-40 lg:px-8">
         <div class="absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
