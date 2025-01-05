@@ -220,9 +220,6 @@
        document.getElementById('delete-task-id').value = id;
 
     }
-    function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-    }
     
     
 

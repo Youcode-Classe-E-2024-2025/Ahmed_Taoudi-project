@@ -16,25 +16,7 @@
             }
         });
 
-    // Modal functionality
-    // const modal = document.getElementById('newProjectModal');
-    // const openModalBtn = document.getElementById('btn-nouveau-projet');
-    // const closeModalBtn = modal?.getElementById('btn-close-model');
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
 
-    // openModal = function (event){
-    //     modal?.classList.remove('hidden');
-    // };
-    // closeModal = function (){
-    //     modal?.classList.remove('hidden');
-    // };
-
-    // closeModalBtn.addEventListener('click', () => {
-    //     modal.classList.add('hidden');
-    // });
-
-    // Close modal when clicking outside
-    // modal.addEventListener('click', (e) => {
-    //     if (e.target === modal) {
-    //         modal.classList.add('hidden');
-    //     }
-    // });
