@@ -107,19 +107,22 @@ class Project {
        $this->conn->query($query, $params);
     // TODO  :  return id 
     }
-    public function read($id = null) {
+    public function read($uid,$id = null) {
         $query = "SELECT p.*, u.name as creator_name
                 FROM " . $this->table . " p
                 LEFT JOIN users u ON p.created_by = u.id
-                LEFT JOIN user_projects up ON p.id = up.project_id ";
+               
+               ";
         
-        $params = [];
         if ($id) {
-            $query .= " WHERE p.id = :id";
-            $params[':id'] = $id;
+            $query .= " WHERE p.id = :id and p.created_by = :uid";
+            $params=['uid'=>$uid , 'id' => $id];
+        }else{
+            $query .= " WHERE p.created_by = :uid";
+            $params = ['uid'=>$uid]; 
         }
         
-        $query .= " GROUP BY p.id";
+        // $query .= " GROUP BY p.id";
         
         return $this->conn->query($query, $params);
     }
@@ -192,6 +195,29 @@ class Project {
                 GROUP BY t.id";
 
         return $this->conn->query($query, [':project_id' => $this->id]);
+    }
+    public function getTasksByStatus($status) {
+        $query = "SELECT t.*, 
+                        GROUP_CONCAT(u.name) as assignee_names
+                FROM tasks t
+                LEFT JOIN task_users tu ON t.id = tu.task_id
+                LEFT JOIN users u ON tu.user_id = u.id
+                WHERE t.project_id = :project_id AND t.status = :status
+                GROUP BY t.id";
+
+        return $this->conn->query($query, [':project_id' => $this->id, ':status' => $status]);
+    }
+    public function getTaskStats() {
+        $query = "SELECT 
+                    COUNT(*) as total_tasks,
+                    SUM(CASE WHEN status = 'done' THEN 1 ELSE 0 END) as completed_tasks,
+                    SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_tasks,
+                    SUM(CASE WHEN status = 'todo' THEN 1 ELSE 0 END) as todo_tasks,
+                    SUM(CASE WHEN status = 'review' THEN 1 ELSE 0 END) as review_tasks
+                FROM tasks 
+                WHERE project_id = :project_id";
+
+        return $this->conn->query($query, [':project_id' => $this->id])->fetch();
     }
 
     public function toArray() {

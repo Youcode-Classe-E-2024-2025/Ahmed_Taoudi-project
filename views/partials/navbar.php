@@ -5,9 +5,9 @@
                     <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" class="lg:hidden mr-2 text-white">
                         <i class="ri-menu-line text-2xl"></i>
                     </button>
-                    <a href="#" class="text-xl font-bold flex items-center lg:ml-2.5">
-                        <img src="assets/images/logo.png" alt="Logo" class="h-8 w-8 mr-2">
-                        <span class="text-emerald-600">TeamFlow</span>
+                    <a href="/" class="text-xl font-bold flex items-center lg:ml-2.5">
+                        <!-- <img src="assets/images/logo.png" alt="Logo" class="h-8 w-8 mr-2"> -->
+                        <span class="text-white">TeamFlow</span>
                     </a>
                 </div>
                 <?php if(!isset($_SESSION['user'])){?> 

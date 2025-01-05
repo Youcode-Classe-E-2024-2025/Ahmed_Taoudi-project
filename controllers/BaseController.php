@@ -70,4 +70,7 @@ class BaseController {
         }
         return null;
     }
+    protected function _404() {
+        require "views/errors/404.php";
+    }
 }

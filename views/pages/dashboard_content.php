@@ -1,9 +1,9 @@
 <?php
 // Get some sample data (replace with actual data from your database)
-$totalProjects = 12;
-$activeProjects = 5;
-$totalTasks = 48;
-$completedTasks = 32;
+// $totalProjects = 12;
+// $activeProjects = 5;
+// $totalTasks = 48;
+// $completedTasks = 32;
 ?>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">

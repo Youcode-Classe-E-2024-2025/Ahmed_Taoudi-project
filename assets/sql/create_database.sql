@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS projects (
     description TEXT,
     start_date DATE,
     end_date DATE,
-    status ENUM('planning', 'in_progress', 'on_hold', 'completed') DEFAULT 'planning',
+    status ENUM('planning', 'in_progress', 'completed') DEFAULT 'planning',
     created_by INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),

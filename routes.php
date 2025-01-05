@@ -21,6 +21,9 @@ $router->register('/project/delete', 'ProjectController', 'delete');
 
 // Task routes
 $router->register('/tasks', 'TaskController', 'index');
+$router->register('/task', 'TaskController', 'show');
+$router->register('/taskJS', 'TaskController', 'taskJS'); //fetch in /views/pages/project_content
 $router->register('/task/create', 'TaskController', 'create');
 $router->register('/task/edit', 'TaskController', 'edit');
+$router->register('/task/updateStatus', 'TaskController', 'updateStatus');
 $router->register('/task/delete', 'TaskController', 'delete');

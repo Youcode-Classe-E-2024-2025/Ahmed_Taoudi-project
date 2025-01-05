@@ -18,8 +18,8 @@ class Database
         $this->dsn = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME;
 
         // Suppress error display
-        error_reporting(0);
-        ini_set('display_errors', 0);
+        // error_reporting(0);
+        // ini_set('display_errors', 0);
 
         try {
 

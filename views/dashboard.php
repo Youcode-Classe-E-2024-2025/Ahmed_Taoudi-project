@@ -1,4 +1,4 @@
 <?php
-$content = 'pages/dashboard_content.php';
+$content = 'views/pages/dashboard_content.php';
 include 'layouts/app.php';
 ?>

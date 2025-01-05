@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "assets/helper/fonctions.php";
+// dd(password_hash('password', PASSWORD_DEFAULT));
 // dd($_SESSION);
 require_once "core/Router.php";
 require_once "models/Database.php";
