@@ -4,14 +4,35 @@ class Role
 {
 
     private $table = 'roles';
-
-    private $name;
     private $conn;
 
+    private $name;
+    private $desc;
+
+    public function __construct($db){
+        $this->conn = $db;
+    }
+    
+    // setters
+    public function setName($name){
+        $this->name = $name ;
+    }
+    
+    public function setDesc($desc){
+        $this->desc = $desc ;
+    }
+
+    public function getName(){
+        return $this->name  ;
+    }
+    
+    public function getDesc(){
+        return $this->desc  ;
+    }
 
     public function create($array){
-        $query = "INSERT INTO " . $this->table . "(name) VALUES (:name)";
-        $this->conn->query($query,['name'=>$this->name]);
+        $query = "INSERT INTO " . $this->table . "(name,description) VALUES (:name,:desc)";
+        $this->conn->query($query,['name'=>$this->name ,'desc'=>$this->desc]);
 
         foreach($array as $permission){
             $this->addPermission($permission);
