@@ -6,7 +6,9 @@
 //     'team' => $team,
 //     'availableUsers'=>$availableUsers,
 //     'stats' => $stats,
-//     'permissions'=>$permissions
+//     'permissions'=>$permissions,
+//     'categories' => $categories,
+//     'tags' => $tags
 // ]);
 ?>
 
@@ -131,6 +133,29 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                             <textarea name="description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                            <select name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="">Sélectionner une catégorie</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                            <div class="flex flex-wrap gap-2">
+                                <?php foreach ($tags as $tag): ?>
+                                <div class="tag-selector" data-tag-id="<?= $tag['id'] ?>">
+                                    <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" id="create-tag-<?= $tag['id'] ?>" class="hidden">
+                                    <label for="create-tag-<?= $tag['id'] ?>" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 cursor-pointer hover:bg-blue-50 transition-colors duration-200">
+                                        <i class="ri-price-tag-3-line mr-1"></i>
+                                        <?= htmlspecialchars($tag['name']) ?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date d'échéance</label>
@@ -290,8 +315,12 @@ function openAddMemberModal() {
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <input type="hidden" name="task_id" id="delete-task-id">
                     <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Supprimer</button>
-                    <button type="button" onclick="closeModal('confirm-delete-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"  >Annuler</button>
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Supprimer
+                    </button>
+                    <button type="button" onclick="closeModal('confirm-delete-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Annuler
+                    </button>
                 </div>
             </form>
             </div>
@@ -334,6 +363,31 @@ function confirmDelete(id) {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                                 <textarea id="edit-task-description" name="description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                                <select name="category_id" id="edit-category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="">Sélectionner une catégorie</option>
+                                    <?php foreach ($categories as $category): ?>
+                                        <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <?php foreach ($tags as $tag): ?>
+                                    <div class="tag-selector" data-tag-id="<?= $tag['id'] ?>">
+                                        <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" id="edit-tag-<?= $tag['id'] ?>" class="hidden">
+                                        <label for="edit-tag-<?= $tag['id'] ?>" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 cursor-pointer hover:bg-blue-50 transition-colors duration-200">
+                                            <i class="ri-price-tag-3-line mr-1"></i>
+                                            <?= htmlspecialchars($tag['name']) ?>
+                                        </label>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                             
                             <div>
@@ -389,63 +443,73 @@ function confirmDelete(id) {
 </div>
 
 <script>
-function editTask(taskId) {
-    // Fetch task details using AJAX
-    fetch('/taskJS', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({ taskId: taskId })
-    })
-    .then(response => response.json())
-    .then(task => {
-        // Populate the form fields
-        document.getElementById('edit-task-id').value = task.id;
-        document.getElementById('edit-task-title').value = task.title;
-        document.getElementById('edit-task-description').value = task.description;
-        document.getElementById('edit-task-status').value = task.status;
-        document.getElementById('edit-task-due-date').value = task.due_date;
-        
-        // Handle assigned users checkboxes
-        const assignedUsers = task.assigned_users.map(user => user.id) || [];
-        document.querySelectorAll('input[name="assigned_users[]"]').forEach(checkbox => {
-            checkbox.checked = assignedUsers.includes(parseInt(checkbox.value));
-        });
-        
-        // Show the modal
-        document.getElementById('edit-task-modal').classList.remove('hidden');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Une erreur est survenue lors de la récupération des détails de la tâche');
-    });
-}
-
-// Add hover and active effects to member selection
 document.addEventListener('DOMContentLoaded', function() {
-    const memberLabels = document.querySelectorAll('label[for^="member-"], label[for^="edit-member-"]');
-    memberLabels.forEach(label => {
-        label.addEventListener('mouseenter', function() {
-            this.classList.add('bg-gray-50');
-        });
-        label.addEventListener('mouseleave', function() {
-            this.classList.remove('bg-gray-50');
-        });
-    });
-
-    // Add active effect for checkboxes
-    const checkboxes = document.querySelectorAll('input[name="assigned_users[]"]');
-    checkboxes.forEach(checkbox => {
+    // Initialize tag selectors
+    const tagSelectors = document.querySelectorAll('.tag-selector input[type="checkbox"]');
+    tagSelectors.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            const label = document.querySelector(`label[for="${this.id}"]`);
+            const label = this.nextElementSibling;
             if (this.checked) {
-                label.classList.add('bg-indigo-50');
+                label.classList.remove('bg-gray-100', 'text-gray-700');
+                label.classList.add('bg-blue-100', 'text-blue-800');
             } else {
-                label.classList.remove('bg-indigo-50');
+                label.classList.remove('bg-blue-100', 'text-blue-800');
+                label.classList.add('bg-gray-100', 'text-gray-700');
             }
         });
     });
+
+    // Modify the existing editTask function
+    const originalEditTask = window.editTask;
+    window.editTask = function(taskId) {
+        fetch('/taskJS', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ taskId: taskId })
+        })
+        .then(response => response.json())
+        .then(task => {
+            // Populate other fields
+            document.getElementById('edit-task-id').value = task.id;
+            document.getElementById('edit-task-title').value = task.title;
+            document.getElementById('edit-task-description').value = task.description;
+            document.getElementById('edit-category').value = task.category_id || '';
+            document.getElementById('edit-task-status').value = task.status;
+            document.getElementById('edit-task-due-date').value = task.due_date;
+            
+            // Handle assigned users checkboxes
+            const assignedUsers = task.assigned_users.map(user => user.id) || [];
+            document.querySelectorAll('input[name="assigned_users[]"]').forEach(checkbox => {
+                checkbox.checked = assignedUsers.includes(parseInt(checkbox.value));
+            });
+
+            // Update tags
+            if (task.tags) {
+                const tagIds = task.tags.map(tag => tag.id);
+                document.querySelectorAll('#edit-task-modal .tag-selector input[type="checkbox"]').forEach(checkbox => {
+                    const isSelected = tagIds.includes(parseInt(checkbox.value));
+                    checkbox.checked = isSelected;
+                    const label = checkbox.nextElementSibling;
+                    if (isSelected) {
+                        label.classList.remove('bg-gray-100', 'text-gray-700');
+                        label.classList.add('bg-blue-100', 'text-blue-800');
+                    } else {
+                        label.classList.remove('bg-blue-100', 'text-blue-800');
+                        label.classList.add('bg-gray-100', 'text-gray-700');
+                    }
+                });
+            }
+            
+            // Show the modal
+            document.getElementById('edit-task-modal').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue lors de la récupération des détails de la tâche');
+        });
+    };
 });
 </script>
