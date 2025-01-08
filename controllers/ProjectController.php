@@ -3,16 +3,22 @@ require_once "controllers/BaseController.php";
 require_once "models/Project.php";
 require_once "models/Role.php";
 require_once "models/Task.php";
+require_once "models/Category.php";
+require_once "models/Tag.php";
 require_once "core/Validator.php" ;
+
 class ProjectController extends BaseController {
     private $projectModel;
     private $roleModel;
-
+    private $categoryModel;
+    private $tagModel;
 
     public function __construct() {
         parent::__construct();
         $this->projectModel = new Project($this->db);
         $this->roleModel = new Role($this->db);
+        $this->categoryModel = new Category($this->db);
+        $this->tagModel = new Tag($this->db);
     }
 
     public function index() {
@@ -34,13 +40,20 @@ class ProjectController extends BaseController {
             $stats = $this->projectModel->getTaskStats();
             $this->roleModel->setName($project['user_role_for_project']);
             $permissions = $this->roleModel->getPermissions()->fetchAll();
+            
+            // Get categories and tags
+            $categories = $this->categoryModel->getAllCategories()->fetchAll();
+            $tags = $this->tagModel->getAllTags()->fetchAll();
+            
             $this->render('project', [
                 'project' => $project,
                 'tasks' => $tasks,
                 'team' => $team,
                 'availableUsers'=>$availableUsers,
                 'stats' => $stats,
-                'permissions'=>$permissions
+                'permissions'=>$permissions,
+                'categories' => $categories,
+                'tags' => $tags
             ]);
         } else {
             $projects = $this->projectModel->read($this->user['id'])->fetchAll();
