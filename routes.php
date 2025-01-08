@@ -31,3 +31,16 @@ $router->register('/task/create', 'TaskController', 'create');
 $router->register('/task/edit', 'TaskController', 'edit');
 $router->register('/task/updateStatus', 'TaskController', 'updateStatus');
 $router->register('/task/delete', 'TaskController', 'delete');
+
+
+// Admin routes
+$router->register('/admin', 'AdminController', 'index');
+$router->register('/admin/users', 'AdminController', 'users');
+$router->register('/admin/users/create', 'AdminController', 'createUser');
+$router->register('/admin/users/edit', 'AdminController', 'editUser');
+$router->register('/admin/users/delete', 'AdminController', 'deleteUser');
+$router->register('/admin/roles', 'AdminController', 'roles');
+$router->register('/admin/roles/create', 'AdminController', 'createRole');
+$router->register('/admin/roles/edit', 'AdminController', 'editRole');
+$router->register('/admin/roles/delete', 'AdminController', 'deleteRole');
+
