@@ -8,7 +8,7 @@ class User {
     private $name;
     private $email;
     private $password;
-    // private $role_id;
+    private $role;
     private $created_at;
 
     public function __construct($db) {
@@ -25,9 +25,9 @@ class User {
    public function getEmail() {
        return $this->email;
    }
-//    public function getRoleId() {
-//        return $this->role_id;
-//    }
+   public function getRole() {
+       return $this->role;
+   }
    public function getCreatedAt() {
        return $this->created_at;
    }
@@ -44,9 +44,9 @@ class User {
    public function setPassword($password) {
        $this->password = $password; 
    }
-//    public function setRoleId($role_id) {
-//        $this->role_id = $role_id; 
-//    }
+   public function setRole($role) {
+       $this->role = $role;
+   }
    //create
    public function create() {
         $query = "INSERT INTO " . $this->table . " 
@@ -139,4 +139,18 @@ class User {
        return $result->rowCount();
     }
 
+    public function countUsers() {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table;
+        $result = $this->conn->query($query, []);
+        return $result->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    public function getAllUsersWithRoles() {
+        $query = "SELECT u.*, GROUP_CONCAT(DISTINCT CONCAT(p.name, ': ', up.role_name)) as project_roles 
+                 FROM " . $this->table . " u 
+                 LEFT JOIN user_projects up ON u.id = up.user_id 
+                 LEFT JOIN projects p ON up.project_id = p.id 
+                 GROUP BY u.id";
+        return $this->conn->query($query, []);
+    }
 }

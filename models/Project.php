@@ -241,4 +241,10 @@ class Project {
                  ORDER BY p.created_at DESC";
         return $this->conn->query($query);
     }
+
+    public function countActiveProjects() {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table . " WHERE status = 'in_progress'";
+        $result = $this->conn->query($query);
+        return $result->fetch(PDO::FETCH_ASSOC)['total'];
+    }
 }
