@@ -20,12 +20,25 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <div class="flex justify-between items-start mb-3">
                             <div>   
-                                <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
-                                    <?= htmlspecialchars($task['title']) ?>
-                                </a>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
+                                        <?= htmlspecialchars($task['title']) ?>
+                                    </a>
+                                    <?php if(isset($task['category_name'])): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                            <i class="ri-folder-line mr-1"></i>
+                                            <?= htmlspecialchars($task['category_name']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if(isset($task['tags'])): foreach ($task['tags'] as $tag): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                            <i class="ri-price-tag-3-line mr-1"></i>
+                                            <?= htmlspecialchars($tag['name']) ?>
+                                        </span>
+                                    <?php endforeach; endif; ?>
+                                </div>
                                 <p class="text-xs text-gray-500 mt-1"><?=$task['description']?></p>
                             </div>
-                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800"><?=$task['status']?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <div class="flex items-center justify-between space-x-3 w-full">
@@ -76,12 +89,25 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <div class="flex justify-between items-start mb-3">
                             <div>   
-                                <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
-                                    <?= htmlspecialchars($task['title']) ?>
-                                </a>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
+                                        <?= htmlspecialchars($task['title']) ?>
+                                    </a>
+                                    <?php if(isset($task['category_name'])): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                            <i class="ri-folder-line mr-1"></i>
+                                            <?= htmlspecialchars($task['category_name']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if(isset($task['tags'])): foreach ($task['tags'] as $tag): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                            <i class="ri-price-tag-3-line mr-1"></i>
+                                            <?= htmlspecialchars($tag['name']) ?>
+                                        </span>
+                                    <?php endforeach; endif; ?>
+                                </div>
                                 <p class="text-xs text-gray-500 mt-1"><?=$task['description']?></p>
                             </div>
-                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800"><?=$task['status']?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <div class="flex items-center justify-between space-x-3 w-full">
@@ -130,12 +156,25 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <div class="flex justify-between items-start mb-3">
                             <div>   
-                                <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
-                                    <?= htmlspecialchars($task['title']) ?>
-                                </a>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
+                                        <?= htmlspecialchars($task['title']) ?>
+                                    </a>
+                                    <?php if(isset($task['category_name'])): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                            <i class="ri-folder-line mr-1"></i>
+                                            <?= htmlspecialchars($task['category_name']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if(isset($task['tags'])): foreach ($task['tags'] as $tag): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                            <i class="ri-price-tag-3-line mr-1"></i>
+                                            <?= htmlspecialchars($tag['name']) ?>
+                                        </span>
+                                    <?php endforeach; endif; ?>
+                                </div>
                                 <p class="text-xs text-gray-500 mt-1"><?=$task['description']?></p>
                             </div>
-                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800"><?=$task['status']?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <div class="flex items-center justify-between space-x-3 w-full">
@@ -184,12 +223,25 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <div class="flex justify-between items-start mb-3">
                             <div>   
-                                <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
-                                    <?= htmlspecialchars($task['title']) ?>
-                                </a>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" onclick="showTaskDetails(<?= $task['id'] ?>)" class="text-sm font-medium text-gray-900 hover:text-indigo-600">
+                                        <?= htmlspecialchars($task['title']) ?>
+                                    </a>
+                                    <?php if(isset($task['category_name'])): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                            <i class="ri-folder-line mr-1"></i>
+                                            <?= htmlspecialchars($task['category_name']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if(isset($task['tags'])): foreach ($task['tags'] as $tag): ?>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                            <i class="ri-price-tag-3-line mr-1"></i>
+                                            <?= htmlspecialchars($tag['name']) ?>
+                                        </span>
+                                    <?php endforeach; endif; ?>
+                                </div>
                                 <p class="text-xs text-gray-500 mt-1"><?=$task['description']?></p>
                             </div>
-                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800"><?=$task['status']?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <div class="flex items-center justify-between space-x-3 w-full">
@@ -272,38 +324,27 @@
 
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start">
-                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="task-details-title"></h3>
-                        
-                        <div class="mt-4 space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Description</label>
-                                <p id="task-details-description" class="mt-1 text-sm text-gray-600"></p>
-                            </div>
-                            
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Statut</label>
-                                    <span id="task-details-status" class="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"></span>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Date d'échéance</label>
-                                    <span id="task-details-due-date" class="mt-1 text-sm text-gray-600"></span>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Membres assignés</label>
-                                <div id="task-details-members" class="space-y-2"></div>
-                            </div>
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4" id="task-details-title"></h3>
+                    <div class="space-y-4">
+                        <div id="task-details-category-tags" class="flex flex-wrap gap-2"></div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <p id="task-details-description" class="text-sm text-gray-600"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date d'échéance</label>
+                            <p id="task-details-due-date" class="text-sm text-gray-600"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Assigné à</label>
+                            <div id="task-details-assigned-users" class="flex flex-wrap gap-2"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" onclick="closeModal('task-details-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                <button type="button" onclick="closeTaskDetailsModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                     Fermer
                 </button>
             </div>
@@ -318,7 +359,6 @@
     }
 
     function showTaskDetails(taskId) {
-        // Fetch task details using AJAX
         fetch('/taskJS', {
             method: 'POST',
             headers: {
@@ -329,41 +369,57 @@
         })
         .then(response => response.json())
         .then(task => {
-            // Populate the modal with task details
+            // Set title
             document.getElementById('task-details-title').textContent = task.title;
-            document.getElementById('task-details-description').textContent = task.description || 'Aucune description';
             
-            // Set status with appropriate color
-            const statusElement = document.getElementById('task-details-status');
-            statusElement.textContent = getStatusLabel(task.status);
-            statusElement.className = `mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(task.status)}`;
+            // Set category and tags
+            const categoryTagsContainer = document.getElementById('task-details-category-tags');
+            categoryTagsContainer.innerHTML = '';
             
-            // Format and set due date
-            const dueDate = new Date(task.due_date);
-            document.getElementById('task-details-due-date').textContent = dueDate.toLocaleDateString('fr-FR');
+            // Add category if exists
+            if (task.category) {
+                categoryTagsContainer.innerHTML += `
+                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                        <i class="ri-folder-line mr-1"></i>
+                        ${task.category}
+                    </span>
+                `;
+            }
             
-            // Handle assigned members
-            const membersContainer = document.getElementById('task-details-members');
-            membersContainer.innerHTML = ''; // Clear existing members
+            // Add tags if exist
+            if (task.tags && task.tags.length > 0) {
+                task.tags.forEach(tag => {
+                    categoryTagsContainer.innerHTML += `
+                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                            <i class="ri-price-tag-3-line mr-1"></i>
+                            ${tag.name}
+                        </span>
+                    `;
+                });
+            }
             
+            // Set description
+            document.getElementById('task-details-description').textContent = task.description;
+            
+            // Set due date
+            document.getElementById('task-details-due-date').textContent = new Date(task.due_date).toLocaleDateString('fr-FR');
+            
+            // Set assigned users
+            const assignedUsersContainer = document.getElementById('task-details-assigned-users');
+            assignedUsersContainer.innerHTML = '';
             if (task.assigned_users && task.assigned_users.length > 0) {
-                task.assigned_users.forEach(member => {
-                    const memberElement = document.createElement('div');
-                    memberElement.className = 'flex items-center space-x-3 p-2 rounded-lg bg-gray-50';
-                    
-                    // const member = findMemberById(userId);
-                    if (member) {
-                        memberElement.innerHTML = `
-                            <img class="h-8 w-8 rounded-full" 
-                                 src="https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}" 
-                                 alt="${member.name}">
-                            <span class="text-sm text-gray-900">${member.name}</span>
-                        `;
-                        membersContainer.appendChild(memberElement);
-                    }
+                task.assigned_users.forEach(user => {
+                    assignedUsersContainer.innerHTML += `
+                        <div class="flex items-center space-x-2">
+                            <img class="h-6 w-6 rounded-full" 
+                                 src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}" 
+                                 alt="${user.name}">
+                            <span class="text-sm text-gray-600">${user.name}</span>
+                        </div>
+                    `;
                 });
             } else {
-                membersContainer.innerHTML = '<p class="text-sm text-gray-500">Aucun membre assigné</p>';
+                assignedUsersContainer.innerHTML = '<p class="text-sm text-gray-500">Aucun utilisateur assigné</p>';
             }
             
             // Show the modal
@@ -375,25 +431,7 @@
         });
     }
 
-    function getStatusLabel(status) {
-        const labels = {
-            'todo': 'À faire',
-            'in_progress': 'En cours',
-            'review': 'En révision',
-            'done': 'Terminé'
-        };
-        return labels[status] || status;
+    function closeTaskDetailsModal() {
+        document.getElementById('task-details-modal').classList.add('hidden');
     }
-
-    function getStatusColor(status) {
-        const colors = {
-            'todo': 'bg-gray-100 text-gray-800',
-            'in_progress': 'bg-blue-100 text-blue-800',
-            'review': 'bg-yellow-100 text-yellow-800',
-            'done': 'bg-green-100 text-green-800'
-        };
-        return colors[status] || 'bg-gray-100 text-gray-800';
-    }
-
-
 </script>
