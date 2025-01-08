@@ -77,24 +77,99 @@ INSERT INTO tasks (title, description, project_id, status, due_date) VALUES
 ('Développement Plateforme', 'Développer la plateforme e-learning', 8, 'todo', '2025-06-15'),
 ('Tests Utilisateurs', 'Réaliser les tests utilisateurs', 8, 'todo', '2025-07-15');
 
--- Assign users to projects
-INSERT INTO user_projects (user_id, project_id) VALUES
--- Website Redesign Team
-(1, 1), (2, 1), (3, 1), (4, 1), (7, 1),
--- Mobile App Team
-(2, 2), (3, 2), (4, 2), (6, 2), (8, 2),
--- Management System Team
-(1, 3), (2, 3), (5, 3), (6, 3), (9, 3),
--- E-commerce Platform Team
-(2, 4), (3, 4), (4, 4), (5, 4), (11, 4),
--- BI System Team
-(5, 5), (7, 5), (9, 5), (11, 5),
--- DevOps Team
-(1, 6), (3, 6), (6, 6), (9, 6),
--- HR App Team
-(10, 7), (8, 7), (11, 7), (12, 7),
--- Training Platform Team
-(2, 8), (4, 8), (7, 8), (12, 8);
+-- Insert sample categories
+INSERT INTO categories (name) VALUES 
+('Développement'),
+('Design'),
+('Marketing'),
+('Bug Fix'),
+('Documentation'),
+('Feature'),
+('Testing');
+
+-- Insert sample tags
+INSERT INTO tags (name) VALUES 
+('Urgent'),
+('En attente'),
+('Prioritaire'),
+('Backend'),
+('Frontend'),
+('UI/UX'),
+('API'),
+('Database'),
+('Performance');
+
+-- Update tasks with categories
+UPDATE tasks SET category_id = 1 WHERE id IN (1, 5, 9);  -- Développement
+UPDATE tasks SET category_id = 2 WHERE id IN (2, 6, 10); -- Design
+UPDATE tasks SET category_id = 3 WHERE id IN (3, 7);     -- Marketing
+UPDATE tasks SET category_id = 4 WHERE id IN (4, 8);     -- Bug Fix
+
+-- Link tasks with tags (task_tags)
+INSERT INTO task_tags (task_id, tag_id) VALUES 
+(1, 4), -- Task 1 with Backend
+(1, 7), -- Task 1 with API
+(2, 5), -- Task 2 with Frontend
+(2, 6), -- Task 2 with UI/UX
+(3, 1), -- Task 3 with Urgent
+(4, 1), -- Task 4 with Urgent
+(4, 8), -- Task 4 with Database
+(5, 5), -- Task 5 with Frontend
+(6, 6), -- Task 6 with UI/UX
+(7, 3), -- Task 7 with Prioritaire
+(8, 9), -- Task 8 with Performance
+(9, 4), -- Task 9 with Backend
+(10, 5); -- Task 10 with Frontend
+
+-- Assign users to projects with specific roles
+INSERT INTO user_projects (user_id, project_id, role_name) VALUES
+-- Website Redesign Team (Project 1)
+(1, 1, 'manager'),
+(2, 1, 'rwe'),    
+(3, 1, 'membre'),  
+(4, 1, 'rwe_add'), 
+
+-- Mobile App Development (Project 2)
+(1, 2, 'rwe'),  
+(2, 2, 'manager'), 
+(5, 2, 'rwe_rm'),  
+(6, 2, 'membre'), 
+
+-- Marketing Campaign (Project 3)
+(3, 3, 'manager'),   
+(4, 3, 'rwe_addrm'), 
+(7, 3, 'membre'),   
+(8, 3, 'r-e'),      
+
+-- E-commerce Platform (Project 4)
+(5, 4, 'manager'),  
+(6, 4, 'rwe'),      
+(7, 4, 'membre'),   
+(8, 4, 'rwe_add'),  
+
+-- Training Program (Project 5)
+(2, 5, 'manager'),  
+(4, 5, 'rwe_rm'),   
+(6, 5, 'membre'),   
+(8, 5, 'r-e'),      
+
+-- Data Analysis (Project 6)
+(1, 6, 'manager'),  
+(3, 6, 'rwe_addrm'),
+(5, 6, 'membre'),   
+(7, 6, 'rwe'),      
+
+-- Content Creation (Project 7)
+(4, 7, 'manager'),  
+(6, 7, 'rwe'),      
+(8, 7, 'membre'),   
+(2, 7, 'rwe_add'),    
+
+-- Learning Platform (Project 8)
+(3, 8, 'manager'),    
+(5, 8, 'rwe_rm'),     
+(7, 8, 'membre'),     
+(1, 8, 'r-e');        
 
 -- Assign users to tasks
 INSERT INTO task_users (task_id, user_id) VALUES

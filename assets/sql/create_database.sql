@@ -110,6 +110,13 @@ CREATE TABLE IF NOT EXISTS projects (
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
 
 -- Tasks table
 CREATE TABLE IF NOT EXISTS tasks (
@@ -117,11 +124,23 @@ CREATE TABLE IF NOT EXISTS tasks (
     title VARCHAR(100) NOT NULL,
     description TEXT,
     project_id INT NOT NULL,
+    category_id INT,
     status ENUM('todo', 'in_progress', 'review', 'done') DEFAULT 'todo',
     due_date DATE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
+
+
+
+-- Tags table
+CREATE TABLE IF NOT EXISTS tags (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );
 
 -- User-Project relationship table
@@ -143,4 +162,13 @@ CREATE TABLE IF NOT EXISTS task_users (
     PRIMARY KEY (task_id, user_id),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Task-Tags relationship table
+CREATE TABLE IF NOT EXISTS task_tags (
+    task_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (task_id, tag_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
