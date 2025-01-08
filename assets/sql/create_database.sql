@@ -8,7 +8,7 @@ USE teamflow;
 CREATE TABLE IF NOT EXISTS roles (
     name VARCHAR(50) PRIMARY KEY,
     description TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert default roles
@@ -29,7 +29,7 @@ the role of membre '),
 
 ('rwe_rm', 'can read and create and edit tasks of a project and delete a membre '),
 
-('rwe_addrm', 'can read and create and edit tasks of a project and add or delete a membre '),
+('rwe_addrm', 'can read and create and edit tasks of a project and add or delete a membre ')
 ;
 
 
@@ -54,7 +54,7 @@ INSERT INTO permission (name, description) VALUES
 
 ('removeMembre' , 'remove membre from a project'),/* 5 */
 
-('changeRole' , 'change the role of membre for a project'),/* 6 */
+('changeRole' , 'change the role of membre for a project')/* 6 */
 ;
 
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS role_permission (
 );
 
 -- Insert default role_permission 
-INSERT INTO permission (role, permission) VALUES
+INSERT INTO role_permission (role, permission) VALUES
 
 ('manager' , 1), ('manager' , 2), ('manager' , 3), ('manager' , 4),('manager' , 5),('manager' , 6),
 
@@ -91,10 +91,8 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    PRIMARY KEY (id)
 );
 
 -- Projects table
@@ -105,11 +103,13 @@ CREATE TABLE IF NOT EXISTS projects (
     start_date DATE,
     end_date DATE,
     status ENUM('planning', 'in_progress', 'completed') DEFAULT 'planning',
+    visibility ENUM('public', 'private') DEFAULT 'private',
     created_by INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
+
 
 -- Tasks table
 CREATE TABLE IF NOT EXISTS tasks (

@@ -2,23 +2,23 @@
 /* Insert fake data for testing */
 
 -- Insert fake users with hashed passwords (using default hash for testing)
-INSERT INTO users (name, email, password, role_id) VALUES
-('Ahmed Mohamed', 'ahmed@taoudi.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 1), -- admin
-('Fatma Ali', 'fatma.ali@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 2), -- manager
-('Mohamed Hassan', 'mohamed.hassan@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 3), -- developer
-('Sara Ibrahim', 'sara.ibrahim@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 4), -- designer
-('Omar Khaled', 'omar.khaled@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 2), -- manager
-('Youssef Ali', 'youssef.ali@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 3), -- developer
-('Layla Ahmed', 'layla.ahmed@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 3), -- developer
-('Karim Mahmoud', 'karim.mahmoud@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 4), -- designer
-('Nour Hassan', 'nour.hassan@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 3), -- developer
-('Amira Samir', 'amira.samir@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 2), -- manager
-('Hassan Ibrahim', 'hassan.ibrahim@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 3), -- developer
-('Rania Adel', 'rania.adel@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei', 4); -- designer
+INSERT INTO users (name, email, password) VALUES
+('Ahmed Mohamed', 'ahmed@taoudi.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- admin
+('Fatma Ali', 'fatma.ali@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- manager
+('Mohamed Hassan', 'mohamed.hassan@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
+('Sara Ibrahim', 'sara.ibrahim@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- designer
+('Omar Khaled', 'omar.khaled@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- manager
+('Youssef Ali', 'youssef.ali@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
+('Layla Ahmed', 'layla.ahmed@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
+('Karim Mahmoud', 'karim.mahmoud@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- designer
+('Nour Hassan', 'nour.hassan@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
+('Amira Samir', 'amira.samir@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- manager
+('Hassan Ibrahim', 'hassan.ibrahim@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
+('Rania Adel', 'rania.adel@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei'); -- designer
 
 -- Insert sample projects with different statuses
 INSERT INTO projects (name, description, start_date, end_date, status, created_by) VALUES
-('Refonte du Site Web', 'Modernisation complète du site web de l''entreprise avec nouvelles fonctionnalités', '2025-01-01', '2025-06-01', 'in_progress', 1),
+('Refonte du Site Web', 'Modernisation complète du site web de l''entreprise avec nouvelles fonctionnalités', '2025-01-01', '2025-06-01', 'in_progress',1),
 ('Application Mobile', 'Développement d''une application mobile pour nos clients', '2025-02-01', '2025-08-01', 'planning', 2),
 ('Système de Gestion', 'Implémentation d''un nouveau système de gestion interne', '2025-01-15', '2025-05-01', 'in_progress', 1),
 ('Plateforme E-commerce', 'Création d''une plateforme e-commerce pour nos produits', '2025-03-01', '2025-09-01', 'planning', 2),

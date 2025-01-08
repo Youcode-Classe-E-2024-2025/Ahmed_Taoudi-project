@@ -41,15 +41,26 @@ class Role
 
     public function addPermission($permission){
         $query = " INSERT INTO role_permission(role, permission ) VALUES (:role , :permission )" ;
-            $params = ['name'=>$this->name,'permission' => $permission];
-            $this->conn->query($query,$params);
+        $params = ['name'=>$this->name,'permission' => $permission];
+        $this->conn->query($query,$params);
     }
+
     public function removePermission($permission){
         $query="DELETE FROM role_permission rp 
                 WHERE rp.role = :rolename 
                 AND rp.permission = :permission";
         $params= ['rolename'=>$this->name ,'permission' =>$permission];
-        $this->conn->query($query,$params);
+        return  $this->conn->query($query,$params);
+    }
+
+    public function getPermissions(){
+        $query = "SELECT p.name FROM permission p 
+                JOIN role_permission rp  
+                ON p.id = rp.permission
+                where rp.role = :name
+        " ;
+        $params = ['name'=>$this->name];
+       return $this->conn->query($query,$params);
     }
 
 

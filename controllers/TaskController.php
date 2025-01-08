@@ -3,12 +3,15 @@ require_once "controllers/BaseController.php";
 require_once "core/Validator.php";
 // require_once "models/Project.php";
 require_once "models/Task.php";
+require_once "models/Role.php";
 class TaskController extends BaseController {
     private $taskModel;
+    private $roleModel;
 
     public function __construct() {
         parent::__construct();
         $this->taskModel = new Task($this->db);
+        $this->roleModel = new Role($this->db);
     }
 
     public function index() {

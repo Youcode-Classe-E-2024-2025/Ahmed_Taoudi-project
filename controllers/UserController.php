@@ -2,10 +2,12 @@
 
 class UserController extends BaseController {
     private $userModel;
+    private $roleModel;
 
     public function __construct() {
         parent::__construct();
         $this->userModel = new User($this->db);
+        $this->roleModel = new User($this->db);
     }
 
     public function index() {
@@ -43,7 +45,6 @@ class UserController extends BaseController {
             $this->userModel->setId(Validator::XSS( $_POST['id']));
             $this->userModel->setName(Validator::XSS( $_POST['name']));
             $this->userModel->setEmail(Validator::XSS( $_POST['email']));
-            $this->userModel->setRoleId(Validator::XSS( $_POST['role_id']));
 
             if ($this->userModel->update()) {
                 $_SESSION['message'] = 'Profile updated successfully';

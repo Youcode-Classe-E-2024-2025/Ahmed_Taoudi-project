@@ -6,7 +6,7 @@ package-lock.json
 
 assets/css/output.css
 
-assets/sql
+# assets/sql
 
 
 

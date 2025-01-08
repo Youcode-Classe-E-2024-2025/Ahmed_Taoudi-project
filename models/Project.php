@@ -104,26 +104,22 @@ class Project {
             ':created_by' => $this->created_by
         ];
 
-       $this->conn->query($query, $params);
+      return $this->conn->query($query, $params);
     // TODO  :  return id 
     }
     public function read($uid,$id = null) {
-        $query = "SELECT p.*, u.name as creator_name
+        $query = "SELECT p.* , up.role_name as user_role_for_project
                 FROM " . $this->table . " p
-                LEFT JOIN users u ON p.created_by = u.id
-               
+                LEFT JOIN user_projects up ON  up.project_id = p.id
                ";
-        
         if ($id) {
-            $query .= " WHERE p.id = :id and p.created_by = :uid";
+            $query .= " WHERE p.id = :id and up.user_id = :uid or p.created_by = :uid";
             $params=['uid'=>$uid , 'id' => $id];
         }else{
-            $query .= " WHERE p.created_by = :uid";
+            $query .= " WHERE up.user_id = :uid OR p.created_by = :uid";
             $params = ['uid'=>$uid]; 
         }
-        
-        // $query .= " GROUP BY p.id";
-        
+
         return $this->conn->query($query, $params);
     }
     public function update() {

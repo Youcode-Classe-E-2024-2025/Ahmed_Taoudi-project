@@ -8,7 +8,7 @@ class User {
     private $name;
     private $email;
     private $password;
-    private $role_id;
+    // private $role_id;
     private $created_at;
 
     public function __construct($db) {
@@ -25,9 +25,9 @@ class User {
    public function getEmail() {
        return $this->email;
    }
-   public function getRoleId() {
-       return $this->role_id;
-   }
+//    public function getRoleId() {
+//        return $this->role_id;
+//    }
    public function getCreatedAt() {
        return $this->created_at;
    }
@@ -44,21 +44,20 @@ class User {
    public function setPassword($password) {
        $this->password = $password; 
    }
-   public function setRoleId($role_id) {
-       $this->role_id = $role_id; 
-   }
+//    public function setRoleId($role_id) {
+//        $this->role_id = $role_id; 
+//    }
    //create
    public function create() {
         $query = "INSERT INTO " . $this->table . " 
-                (name, email, password, role_id)
+                (name, email, password)
                 VALUES 
-                (:name, :email, :password, :role_id)";
+                (:name, :email, :password)";
 
         $params = [
             ':name' => $this->name,
             ':email' => $this->email,
-            ':password' => password_hash($this->password, PASSWORD_DEFAULT),
-            ':role_id' => $this->role_id
+            ':password' => password_hash($this->password, PASSWORD_DEFAULT)
         ];
 
     return $this->conn->query($query, $params);
@@ -81,14 +80,12 @@ class User {
     public function update() {
         $query = "UPDATE " . $this->table . "
                 SET name = :name,
-                    email = :email,
-                    role_id = :role_id
+                    email = :email
                 WHERE id = :id";
 
         $params = [
             ':name' => $this->name,
             ':email' => $this->email,
-            ':role_id' => $this->role_id,
             ':id' => $this->id
         ];
 
@@ -100,9 +97,8 @@ class User {
     }
 
     public function login($email, $password) {
-        $query = "SELECT u.*, r.name as role_name 
+        $query = "SELECT u.*
                 FROM " . $this->table . " u
-                LEFT JOIN roles r ON u.role_id = r.id 
                 WHERE u.email = :email";
 
         $result = $this->conn->query($query, [':email' => $email]);
@@ -113,6 +109,7 @@ class User {
         }
         return false;
     }
+    
     public function getProjects() {
         $query = "SELECT p.*, up.joined_at
                 FROM projects p

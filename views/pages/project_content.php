@@ -1,11 +1,13 @@
 <!-- project content details -->
 <?php
 //  pd([
-//                 'project' => $project,
-//                 'tasks' => $tasks,
-//                 'team' => $team,
-//                 'stats' => $stats
-//             ]);
+//     'project' => $project,
+//     'tasks' => $tasks,
+//     'team' => $team,
+//     'availableUsers'=>$availableUsers,
+//     'stats' => $stats,
+//     'permissions'=>$permissions
+// ]);
 ?>
 
 <div class="space-y-6">

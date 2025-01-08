@@ -56,7 +56,7 @@ class AuthController extends BaseController {
 
     public function register() {
         if ($this->isLoggedIn()) {
-            $this->redirect('/dashboard');
+            $this->redirect('/');
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -78,7 +78,6 @@ class AuthController extends BaseController {
             $this->userModel->setName($name);
             $this->userModel->setEmail($email);
             $this->userModel->setPassword($password);
-            $this->userModel->setRoleId(2); // Default role for new users
 
             if ($this->userModel->create()) {
                 $_SESSION['message'] = 'Registration successful. Please login.';
