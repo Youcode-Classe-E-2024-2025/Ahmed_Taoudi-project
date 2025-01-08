@@ -63,7 +63,58 @@ class Role
        return $this->conn->query($query,$params);
     }
 
+    public function countRoles() {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table;
+        $result = $this->conn->query($query);
+        return $result->fetch(PDO::FETCH_ASSOC)['total'];
+    }
 
+    public function getAllRoles() {
+        $query = "SELECT r.*, GROUP_CONCAT(p.name) as permissions 
+                 FROM " . $this->table . " r 
+                 LEFT JOIN role_permission rp ON r.name = rp.role 
+                 LEFT JOIN permission p ON rp.permission = p.id 
+                 GROUP BY r.name";
+        return $this->conn->query($query);
+    }
 
+    public function getAllPermissions() {
+        $query = "SELECT * FROM permission";
+        return $this->conn->query($query);
+    }
 
+    public function getRolePermissions($roleName) {
+        $query = "SELECT p.* FROM permission p 
+                 JOIN role_permission rp ON p.id = rp.permission 
+                 WHERE rp.role = :role";
+        return $this->conn->query($query, ['role' => $roleName]);
+    }
+
+    public function update($permissions = []) {
+        $query = "UPDATE " . $this->table . " SET description = :desc WHERE name = :name";
+        $result = $this->conn->query($query, ['name' => $this->name, 'desc' => $this->desc]);
+        
+        if ($result) {
+            // Remove old permissions
+            $query = "DELETE FROM role_permission WHERE role = :role";
+            $this->conn->query($query, ['role' => $this->name]);
+            
+            // Add new permissions
+            foreach ($permissions as $permission) {
+                $this->addPermission($permission);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function delete() {
+        // Delete role permissions first
+        $query = "DELETE FROM role_permission WHERE role = :role";
+        $this->conn->query($query, ['role' => $this->name]);
+        
+        // Delete role
+        $query = "DELETE FROM " . $this->table . " WHERE name = :name";
+        return $this->conn->query($query, ['name' => $this->name]);
+    }
 }
