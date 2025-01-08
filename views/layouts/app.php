@@ -32,41 +32,39 @@
                     <span class="ml-3">Équipe</span>
                 </a>
                 <div class="pt-4 mt-4 border-t border-gray-200">
-                    <h3 class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Catégories
-                    </h3>
-                    <div class="mt-2 space-y-1">
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                            Développement
-                        </a>
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                            Design
-                        </a>
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                            Marketing
-                        </a>
+                    <div class="flex items-center justify-between px-2">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Catégories & Tags
+                        </h3>
+                        <div class="flex space-x-1">
+                            <button onclick="document.getElementById('category-management-modal').classList.remove('hidden')" 
+                                    class="p-1 text-gray-500 hover:text-emerald-600 rounded-full hover:bg-emerald-100">
+                                <i class="ri-settings-4-line"></i>
+                            </button>
+                            <button onclick="document.getElementById('tag-management-modal').classList.remove('hidden')" 
+                                    class="p-1 text-gray-500 hover:text-emerald-600 rounded-full hover:bg-emerald-100">
+                                <i class="ri-price-tag-3-line"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="pt-4 mt-4 border-t border-gray-200">
-                    <h3 class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Tags
-                    </h3>
                     <div class="mt-2 space-y-1">
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <i class="ri-price-tag-3-line mr-2 text-gray-400"></i>
-                            Urgent
-                        </a>
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <i class="ri-price-tag-3-line mr-2 text-gray-400"></i>
-                            En attente
-                        </a>
-                        <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <i class="ri-price-tag-3-line mr-2 text-gray-400"></i>
-                            Révision
-                        </a>
+                        <?php if(isset($categories)): foreach($categories as $category): ?>
+                            <a href="#" class="flex items-center px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                                <?= htmlspecialchars($category['name']) ?>
+                            </a>
+                        <?php endforeach; endif; ?>
+                    </div>
+                    
+                    <h3 class="px-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        Tags populaires
+                    </h3>
+                    <div class="mt-2 px-2 flex flex-wrap gap-2">
+                        <?php if(isset($tags)): foreach($tags as $tag): ?>
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                <?= htmlspecialchars($tag['name']) ?>
+                            </span>
+                        <?php endforeach; endif; ?>
                     </div>
                 </div>
             </div>
