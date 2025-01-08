@@ -12,6 +12,8 @@ class Task {
     private $due_date;
     private $created_at;
     private $assigned_users = [];
+    private $category_id;
+    private $tags = [];
 
     public function __construct($db) {
         $this->conn = $db;
@@ -58,6 +60,54 @@ class Task {
         return $this->conn->query($query, [':task_id' => $this->id]);
     }
 
+    // Category methods
+    public function setCategoryId($category_id) {
+        $this->category_id = $category_id;
+    }
+
+    public function getCategoryId() {
+        return $this->category_id;
+    }
+
+    public function getCategory() {
+        if (!isset($this->category_id)) return null;
+        
+        $query = "SELECT * FROM categories WHERE id = :category_id";
+        return $this->conn->query($query, [':category_id' => $this->category_id])->fetch();
+    }
+
+    // Tag methods
+    public function setTags($tags) {
+        $this->tags = $tags;
+    }
+
+    public function getTags() {
+        $query = "SELECT t.* FROM tags t 
+                 JOIN task_tags tt ON t.id = tt.tag_id 
+                 WHERE tt.task_id = :task_id";
+        return $this->conn->query($query, [':task_id' => $this->id]);
+    }
+
+    public function addTag($tag_id) {
+        $query = "INSERT INTO task_tags (task_id, tag_id) VALUES (:task_id, :tag_id)";
+        return $this->conn->query($query, [
+            ':task_id' => $this->id,
+            ':tag_id' => $tag_id
+        ]);
+    }
+
+    public function removeTag($tag_id) {
+        $query = "DELETE FROM task_tags WHERE task_id = :task_id AND tag_id = :tag_id";
+        return $this->conn->query($query, [
+            ':task_id' => $this->id,
+            ':tag_id' => $tag_id
+        ]);
+    }
+
+    public function removeAllTags() {
+        $query = "DELETE FROM task_tags WHERE task_id = :task_id";
+        return $this->conn->query($query, [':task_id' => $this->id]);
+    }
 
     // Setters
     public function setId($id) {
@@ -103,16 +153,17 @@ class Task {
         try {
             
             $query = "INSERT INTO " . $this->table . " 
-                    (title, description, status, due_date, project_id) 
+                    (title, description, status, due_date, project_id, category_id) 
                     VALUES 
-                    (:title, :description, :status, :due_date, :project_id)";
+                    (:title, :description, :status, :due_date, :project_id, :category_id)";
             
             $result = $this->conn->query($query, [
                 ':title' => $this->title,
                 ':description' => $this->description,
                 ':status' => $this->status,
                 ':due_date' => $this->due_date,
-                ':project_id' => $this->project_id
+                ':project_id' => $this->project_id,
+                ':category_id' => $this->category_id
             ]);
             
             if ($result) {
@@ -121,6 +172,13 @@ class Task {
                 // Handle user assignments
                 if (!empty($this->assigned_users)) {
                     $this->assignUsers($this->assigned_users);
+                }
+                
+                // Handle tags
+                if (!empty($this->tags)) {
+                    foreach ($this->tags as $tag_id) {
+                        $this->addTag($tag_id);
+                    }
                 }
                 
                 $this->conn->connection->commit();
@@ -201,21 +259,30 @@ class Task {
                     SET title = :title, 
                         description = :description, 
                         status = :status, 
-                        due_date = :due_date
+                        due_date = :due_date,
+                        category_id = :category_id
                     WHERE id = :id";
-
+            
             $result = $this->conn->query($query, [
                 ':title' => $this->title,
                 ':description' => $this->description,
                 ':status' => $this->status,
                 ':due_date' => $this->due_date,
+                ':category_id' => $this->category_id,
                 ':id' => $this->id
             ]);
-
+            
             if ($result) {
                 // Handle user assignments
                 if (!empty($this->assigned_users)) {
                     $this->assignUsers($this->assigned_users);
+                }
+                // Update tags if they've been set
+                if (!empty($this->tags)) {
+                    $this->removeAllTags();
+                    foreach ($this->tags as $tag_id) {
+                        $this->addTag($tag_id);
+                    }
                 }
                 
                 $this->conn->connection->commit();
@@ -230,6 +297,7 @@ class Task {
             if ($this->conn->connection->inTransaction()) {
                 $this->conn->connection->rollback();
             }
+            error_log('Error during task update: ' . $e->getMessage());
             return false;
         }
     }
@@ -242,9 +310,10 @@ class Task {
         return $this->conn->query($query, [':status' => $this->status, ':id' => $this->id]);
     }
     public function getTasksByStatus($status = 'all') {
-        $query = "SELECT t.*, p.name as project_name 
+        $query = "SELECT t.*, p.name as project_name, c.name as category_name
                 FROM " . $this->table . " t
-                LEFT JOIN projects p ON t.project_id = p.id";
+                LEFT JOIN projects p ON t.project_id = p.id
+                LEFT JOIN categories c ON t.category_id = c.id";
         
         $params = [];
         if ($status !== 'all') {
@@ -253,16 +322,39 @@ class Task {
         }
         
         $query .= " ORDER BY t.due_date ASC";
-        return $this->conn->query($query, $params);
+        $tasks = $this->conn->query($query, $params)->fetchAll();
+        
+        // Add tags for each task
+        foreach ($tasks as &$task) {
+            $tagQuery = "SELECT t.* FROM tags t 
+                        JOIN task_tags tt ON t.id = tt.tag_id 
+                        WHERE tt.task_id = :task_id
+                        ORDER BY t.name";
+            $task['tags'] = $this->conn->query($tagQuery, [':task_id' => $task['id']])->fetchAll();
+        }
+        
+        return $tasks;
     }
     public function getTasksByProject($project_id) {
-        $query = "SELECT t.*, u.name as assigned_to
+        $query = "SELECT t.*, u.name as assigned_to, c.name as category_name
                 FROM " . $this->table . " t
                 LEFT JOIN task_users tu ON t.id = tu.task_id
                 LEFT JOIN users u ON tu.user_id = u.id
+                LEFT JOIN categories c ON t.category_id = c.id
                 WHERE t.project_id = :project_id
                 ORDER BY t.status, t.due_date ASC";
 
-        return $this->conn->query($query, [':project_id' => $project_id]);
+        $tasks = $this->conn->query($query, [':project_id' => $project_id])->fetchAll();
+        
+        // Add tags for each task
+        foreach ($tasks as &$task) {
+            $tagQuery = "SELECT t.* FROM tags t 
+                        JOIN task_tags tt ON t.id = tt.tag_id 
+                        WHERE tt.task_id = :task_id
+                        ORDER BY t.name";
+            $task['tags'] = $this->conn->query($tagQuery, [':task_id' => $task['id']])->fetchAll();
+        }
+        
+        return $tasks;
     }
 }
