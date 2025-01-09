@@ -90,6 +90,23 @@
             </div>
         </div>
         <script>setTimeout(()=>{  document.getElementById('green_message').remove();},5000) </script>
+        <?php elseif(isset($_SESSION['error'])):?>
+            <div id="reed_message">
+            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="ri-error-warning-line text-red-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">
+                            <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- <script>setTimeout(()=>{  document.getElementById('red_message').remove();},5000) </script> -->
             <?php endif; ?>
         <div id="content">
             <?php require_once $content; ?>
