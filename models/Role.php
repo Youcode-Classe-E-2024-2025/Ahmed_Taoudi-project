@@ -117,4 +117,9 @@ class Role
         $query = "DELETE FROM " . $this->table . " WHERE name = :name";
         return $this->conn->query($query, ['name' => $this->name]);
     }
+    public function getRoleByUserId($userId, $projectId ) {
+        $query = "SELECT role_name FROM user_projects up
+                 WHERE user_id = :userId AND project_id = :projectId";
+        return $this->conn->query($query, ['userId' => $userId, 'projectId' => $projectId])->fetchColumn();
+    }
 }
