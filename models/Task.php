@@ -250,6 +250,17 @@ class Task {
 
         
     }
+    
+    public function removeTaskAssignee($user_id,$project_id) {
+
+        $query = "DELETE tu
+                    FROM task_users tu
+                    JOIN tasks t ON tu.task_id = t.id
+                    LEFT JOIN projects p ON t.project_id = p.id
+                    WHERE p.id = :project_id
+                    AND tu.user_id = :user_id";
+        return $this->conn->query($query, [':project_id' => $project_id, ':user_id' => $user_id]);
+    }
 
     public function update() {
         $this->conn->connection->beginTransaction();

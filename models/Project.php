@@ -108,17 +108,18 @@ class Project {
     // TODO  :  return id 
     }
     public function read($uid,$id = null) {
-        $query = "SELECT p.* , up.role_name as user_role_for_project
+        $query = "SELECT p.* 
                 FROM " . $this->table . " p
                 LEFT JOIN user_projects up ON  up.project_id = p.id
                ";
         if ($id) {
-            $query .= " WHERE p.id = :id and up.user_id = :uid or p.created_by = :uid";
+            $query .= " WHERE p.id = :id and (up.user_id = :uid or p.created_by = :uid) ";
             $params=['uid'=>$uid , 'id' => $id];
         }else{
-            $query .= " WHERE up.user_id = :uid OR p.created_by = :uid";
+            $query .= " WHERE up.user_id = :uid or p.created_by = :uid ";
             $params = ['uid'=>$uid]; 
         }
+        $query .= " GROUP BY p.id" ;
 
         return $this->conn->query($query, $params);
     }

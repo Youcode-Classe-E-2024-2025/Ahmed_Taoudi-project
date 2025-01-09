@@ -5,10 +5,12 @@ require_once "core/Validator.php";
 require_once "models/Task.php";
 require_once "models/Role.php";
 require_once "models/Category.php";
+require_once "controllers/PermissionChecker.php";
 require_once "models/Tag.php";
 class TaskController extends BaseController {
     private $taskModel;
     private $roleModel;
+    private $permissionChecker;
     private $categoryModel;
     private $tagModel;
 
@@ -18,6 +20,7 @@ class TaskController extends BaseController {
         $this->roleModel = new Role($this->db);
         $this->categoryModel = new Category($this->db);
         $this->tagModel = new Tag($this->db);
+        $this->permissionChecker = new PermissionChecker();
     }
 
     public function index() {
@@ -67,7 +70,8 @@ class TaskController extends BaseController {
     public function create() {
         $this->requireAuth();
         
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->isPost()) {
+            // $this->permissionChecker->requirePermission($_POST['project_id'],"write");
             $this->taskModel->setProjectId(Validator::XSS($_POST['project_id']));
             $this->taskModel->setTitle(Validator::XSS($_POST['title'])) ;
             $this->taskModel->setDescription(Validator::XSS($_POST['description']));
@@ -102,7 +106,7 @@ class TaskController extends BaseController {
     }
     public function taskJS() {
         $this->requireAuth();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->isPost()) {
             // Get JSON data from request body
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
@@ -131,7 +135,8 @@ class TaskController extends BaseController {
 
     public function updateStatus() {
         $this->requireAuth();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->isPost()) {
+            // $this->permissionChecker->requirePermission($_POST['project_id'],"read");
             // dd($_POST);
             $this->taskModel->setId($_POST['task_id']) ;
             $this->taskModel->setStatus($_POST['status']);
@@ -154,7 +159,9 @@ class TaskController extends BaseController {
 
     public function edit() {
         $this->requireAuth();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->isPost()) {
+            // $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
+
             $this->taskModel->setId($_POST['id']) ;
             $this->taskModel->setTitle($_POST['title']) ;
             $this->taskModel->setDescription($_POST['description']);
@@ -198,6 +205,8 @@ class TaskController extends BaseController {
 
         if (isset($_POST['task_id'])) {
             // dd($_POST);
+            // $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
+
             $this->taskModel->setId($_POST['task_id']);
             if ($this->taskModel->delete()) {
                 $_SESSION['message'] = 'Task deleted successfully';
@@ -211,27 +220,5 @@ class TaskController extends BaseController {
         }
     }
 
-    public function tasks() {
-        $this->requireAuth();
 
-        $tasks = $this->taskModel->getTasksByStatus()->fetchAll();
-        $team = $this->userModel->getProjectTeam($_GET['project_id'])->fetchAll();
-        
-        // Get categories and tags for each task
-        foreach ($tasks as &$task) {
-            $task['category_name'] = $this->categoryModel->getCategoryName($task['category_id']);
-            $task['tags'] = $this->tagModel->getTagsByTask($task['id'])->fetchAll();
-        }
-        
-        // Get all categories and tags for the modals
-        $categories = $this->categoryModel->getAllCategories()->fetchAll();
-        $tags = $this->tagModel->getAllTags()->fetchAll();
-
-        $this->render('tasks_content', [
-            'tasks' => $tasks,
-            'team' => $team,
-            'categories' => $categories,
-            'tags' => $tags
-        ]);
-    }
 }
