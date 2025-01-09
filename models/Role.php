@@ -52,6 +52,11 @@ class Role
         $params= ['rolename'=>$this->name ,'permission' =>$permission];
         return  $this->conn->query($query,$params);
     }
+    public function getRoleOfUser($user_id, $project_id) {
+        $query = "SELECT role_name FROM user_projects up
+                 WHERE user_id = :userId AND project_id = :projectId";
+        return $this->conn->query($query, ['userId' => $user_id, 'projectId' => $project_id])->fetchColumn();
+    }
 
     public function getPermissions(){
         $query = "SELECT p.name FROM permission p 

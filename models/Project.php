@@ -103,8 +103,12 @@ class Project {
             ':status' => $this->status ?? 'planning',
             ':created_by' => $this->created_by
         ];
+       if( $this->conn->query($query, $params)){
+        $this->id = $this->conn->lastInsertId();
+        return true;
+       }
+       return false;
 
-      return $this->conn->query($query, $params);
     // TODO  :  return id 
     }
     public function read($uid,$id = null) {
@@ -164,6 +168,17 @@ class Project {
                 WHERE up.project_id IS NULL";
 
         return $this->conn->query($query);
+    }
+    public function addManager($user_id) {
+        $query = "INSERT INTO user_projects (project_id, user_id, role_name)
+                VALUES (:project_id, :user_id, 'manager')";
+
+        $params = [
+            ':project_id' => $this->id,
+            ':user_id' => $user_id
+        ];
+
+        return $this->conn->query($query, $params);
     }
 
     public function addTeamMember($user_id) {

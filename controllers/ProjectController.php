@@ -3,6 +3,7 @@ require_once "controllers/BaseController.php";
 require_once "models/Project.php";
 require_once "models/Role.php";
 require_once "models/Task.php";
+require_once "models/Role.php";
 require_once "models/Category.php";
 require_once "models/Tag.php";
 require_once "core/Validator.php" ;
@@ -10,6 +11,7 @@ require_once "controllers/PermissionChecker.php" ;
 class ProjectController extends BaseController {
     private $projectModel;
     private $taskModel;
+    private $roleModel;
     private $categoryModel;
     private $tagModel;
     private $permissionChecker;
@@ -18,6 +20,7 @@ class ProjectController extends BaseController {
         parent::__construct();
         $this->projectModel = new Project($this->db);
         $this->taskModel = new Task($this->db);
+        $this->roleModel = new Role($this->db);
         $this->categoryModel = new Category($this->db);
         $this->tagModel = new Tag($this->db);
         $this->permissionChecker = new PermissionChecker();
@@ -40,9 +43,10 @@ class ProjectController extends BaseController {
             $availableUsers = $this->projectModel->getAvailableUsers()->fetchAll();
             $team = $this->projectModel->getTeamMembers()->fetchAll();
             $stats = $this->projectModel->getTaskStats();
-            // $this->roleModel->setName($project['user_role_for_project']);
-            // $permissions = $this->roleModel->getPermissions()->fetchAll();
-            $permissions = [];
+            $roleName = $this->roleModel->getRoleOfUser($this->user['id'],$_GET['id']);
+            $this->roleModel->setName($roleName);
+            $permissions = $this->roleModel->getPermissions()->fetchAll();
+
             
             // Get categories and tags
             $categories = $this->categoryModel->getAllCategories()->fetchAll();
@@ -78,6 +82,7 @@ class ProjectController extends BaseController {
             $this->projectModel->setCreatedBy($this->user['id']) ;
 
             if ($this->projectModel->create()) {
+                $this->projectModel->addManager($this->user['id']);
                 $_SESSION['message'] = 'Project created successfully';
                 // dd(222);
                 $this->redirect('/projects');
