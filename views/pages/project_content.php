@@ -91,14 +91,25 @@
                 <?php else: ?>
                     <?php foreach ($team as $member): ?>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <img class="w-8 h-8 rounded-full"
-                                    src="https://ui-avatars.com/api/?name=<?= urlencode($member['name']) ?>"
-                                    alt="<?= htmlspecialchars($member['name']) ?>">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($member['name']) ?></p>
-
+                            <div class="flex items-center  w-full space-x-3">
+                                <div class="flex items-center  w-full space-x-3">
+                                    <img class="w-8 h-8 rounded-full"
+                                        src="https://ui-avatars.com/api/?name=<?= urlencode($member['name']) ?>"
+                                        alt="<?= htmlspecialchars($member['name']) ?>">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($member['name']) ?></p>
+                                        <p class="text-sm text-gray-500"><?= htmlspecialchars($member['email']) ?></p>
+                                    </div>
                                 </div>
+                                <div>
+                                    <form action="/project/removeMember" method="POST">
+                                    <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+                                    <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
+                                    <button type="submit" class="text-sm text-red-600 hover:text-red-700">
+                                        <i class="ri-user-unfollow-line"></i>
+                                        </button>
+                                    </form>
+                               </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -229,7 +240,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
 
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/projects/addMember" method="POST">
+            <form action="/project/addMember" method="POST">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">

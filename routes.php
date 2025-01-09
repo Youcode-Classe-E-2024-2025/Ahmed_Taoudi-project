@@ -20,7 +20,8 @@ $router->register('/projects', 'ProjectController', 'index');
 $router->register('/project/create', 'ProjectController', 'create');
 $router->register('/project/edit', 'ProjectController', 'edit');
 $router->register('/project/delete', 'ProjectController', 'delete');
-$router->register('/projects/addMember', 'ProjectController', 'addMember');
+$router->register('/project/addMember', 'ProjectController', 'addMember');
+$router->register('/project/removeMember', 'ProjectController', 'removeMember');
 $router->register('/project/updateVisibility', 'ProjectController', 'updateVisibility');
 
 // Task routes
@@ -32,7 +33,6 @@ $router->register('/task/edit', 'TaskController', 'edit');
 $router->register('/task/updateStatus', 'TaskController', 'updateStatus');
 $router->register('/task/delete', 'TaskController', 'delete');
 
-
 // Admin routes
 $router->register('/admin', 'AdminController', 'index');
 $router->register('/admin/users', 'AdminController', 'users');
@@ -43,4 +43,3 @@ $router->register('/admin/roles', 'AdminController', 'roles');
 $router->register('/admin/roles/create', 'AdminController', 'createRole');
 $router->register('/admin/roles/edit', 'AdminController', 'editRole');
 $router->register('/admin/roles/delete', 'AdminController', 'deleteRole');
-
