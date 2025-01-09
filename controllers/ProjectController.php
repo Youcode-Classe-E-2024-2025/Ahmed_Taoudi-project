@@ -6,12 +6,13 @@ require_once "models/Task.php";
 require_once "models/Category.php";
 require_once "models/Tag.php";
 require_once "core/Validator.php" ;
-
+require_once "controllers/PermissionChecker.php" ;
 class ProjectController extends BaseController {
     private $projectModel;
     private $roleModel;
     private $categoryModel;
     private $tagModel;
+    private $permissionChecker;
 
     public function __construct() {
         parent::__construct();
@@ -19,6 +20,7 @@ class ProjectController extends BaseController {
         $this->roleModel = new Role($this->db);
         $this->categoryModel = new Category($this->db);
         $this->tagModel = new Tag($this->db);
+        $this->permissionChecker = new PermissionChecker();
     }
 
     public function index() {
@@ -132,7 +134,7 @@ class ProjectController extends BaseController {
         if ($this->isPost()) {
             $projectId = Validator::XSS($_POST['project_id']);
             $visibility = Validator::XSS($_POST['visibility']);
-            
+            $this->permissionChecker->requirePermission($projectId,"write");
             if (!in_array($visibility, ['public', 'private'])) {
                 $_SESSION['error'] = "Visibilité invalide";
                 $this->redirect('/projects?id=' . $projectId);
