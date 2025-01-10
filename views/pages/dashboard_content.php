@@ -171,20 +171,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 // Function to fetch chart data
-async function fetchChartData(chartType) {
+async function fetchChartData() {
     try {
-        const response = await fetch('/home/getChartData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `chartType=${chartType}`
-        });
-        
+        const response = await fetch('/home/getChartData');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        
         return await response.json();
     } catch (error) {
         console.error('Error fetching chart data:', error);
@@ -194,23 +186,23 @@ async function fetchChartData(chartType) {
 
 // Initialize Project Progress Chart
 async function initProjectProgressChart() {
-    const data = await fetchChartData('projectProgress');
+    const data = await fetchChartData();
     if (!data) return;
 
     const ctx = document.getElementById('projectProgressChart').getContext('2d');
     new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: data.labels,
+            labels: data.projectProgress.labels,
             datasets: [{
-                data: data.data,
+                data: data.projectProgress.data,
                 backgroundColor: ['#10B981', '#FBBF24', '#EF4444'],
                 borderWidth: 0
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'bottom'
@@ -222,17 +214,17 @@ async function initProjectProgressChart() {
 
 // Initialize Team Productivity Chart
 async function initTeamProductivityChart() {
-    const data = await fetchChartData('teamProductivity');
+    const data = await fetchChartData();
     if (!data) return;
 
     const ctx = document.getElementById('teamProductivityChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data.labels,
+            labels: data.teamProductivity.labels,
             datasets: [{
                 label: 'Tasks Completed',
-                data: data.data,
+                data: data.teamProductivity.data,
                 borderColor: '#6366F1',
                 tension: 0.4,
                 fill: false
@@ -240,7 +232,7 @@ async function initTeamProductivityChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
@@ -265,24 +257,24 @@ async function initTeamProductivityChart() {
 
 // Initialize Task Completion Chart
 async function initTaskCompletionChart() {
-    const data = await fetchChartData('taskCompletion');
+    const data = await fetchChartData();
     if (!data) return;
 
     const ctx = document.getElementById('taskCompletionChart').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: data.labels,
+            labels: data.taskCompletion.labels,
             datasets: [{
                 label: 'Completed Tasks',
-                data: data.data,
+                data: data.taskCompletion.data,
                 backgroundColor: '#60A5FA',
                 borderRadius: 4
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,

@@ -227,13 +227,26 @@ class Project {
 
         return $this->conn->query($query, [':project_id' => $this->id, ':status' => $status]);
     }
+    public function getProjectStatus($user_id) {
+        $query = "SELECT 
+                    SUM(CASE WHEN status = 'planning' THEN 1 ELSE 0 END) AS 'planning',
+                    SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) AS 'in_progress',
+                    SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS 'completed'
+                FROM projects p
+                where p.id in (
+                        select pr.project_id
+                           from user_projects pr 
+                           where pr.user_id = :user_id )";
+        $params = ['user_id' => $user_id];
+        return $this->conn->query($query, $params);
+    }
     public function getTaskStats() {
         $query = "SELECT 
-                    COUNT(*) as total_tasks,
-                    SUM(CASE WHEN status = 'done' THEN 1 ELSE 0 END) as completed_tasks,
-                    SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_tasks,
-                    SUM(CASE WHEN status = 'todo' THEN 1 ELSE 0 END) as todo_tasks,
-                    SUM(CASE WHEN status = 'review' THEN 1 ELSE 0 END) as review_tasks
+                    COUNT(*) as total,
+                    SUM(CASE WHEN status = 'done' THEN 1 ELSE 0 END) as completed,
+                    SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
+                    SUM(CASE WHEN status = 'todo' THEN 1 ELSE 0 END) as todo,
+                    SUM(CASE WHEN status = 'review' THEN 1 ELSE 0 END) as review
                 FROM tasks 
                 WHERE project_id = :project_id";
 
