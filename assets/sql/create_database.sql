@@ -50,11 +50,13 @@ INSERT INTO permission (name, description) VALUES
 
 ('edit' , 'edit tasks'),/* 3 */
 
-('addMembre' , 'add new membre to the project'),/* 4 */
+('addMember' , 'add new membre to the project'),/* 4 */
 
-('removeMembre' , 'remove membre from a project'),/* 5 */
+('removeMember' , 'remove membre from a project'),/* 5 */
 
-('changeRole' , 'change the role of membre for a project')/* 6 */
+('changeRole' , 'change the role of membre for a project'),/* 6 */
+
+('updateVisibility' , 'update the visibility of a project')/* 7 */
 ;
 
 
@@ -70,7 +72,7 @@ CREATE TABLE IF NOT EXISTS role_permission (
 -- Insert default role_permission 
 INSERT INTO role_permission (role, permission) VALUES
 
-('manager' , 1), ('manager' , 2), ('manager' , 3), ('manager' , 4),('manager' , 5),('manager' , 6),
+('manager' , 1), ('manager' , 2), ('manager' , 3), ('manager' , 4),('manager' , 5),('manager' , 6),('manager' , 7),
 
 ('membre' , 1), 
 

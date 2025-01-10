@@ -3,7 +3,7 @@
 
 -- Insert fake users with hashed passwords (using default hash for testing)
 INSERT INTO users (name, email, password) VALUES
-('Ahmed Mohamed', 'ahmed@taoudi.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- admin
+('Ahmed taoudi', 'ahmed@taoudi.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- admin
 ('Fatma Ali', 'fatma.ali@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- manager
 ('Mohamed Hassan', 'mohamed.hassan@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- developer
 ('Sara Ibrahim', 'sara.ibrahim@example.com', '$2y$10$l1JWggGTOraAbNxoeC/VJe.fgb6F9.NyVO.h0WWGgcjViUvP48Wei' ), -- designer
@@ -27,58 +27,8 @@ INSERT INTO projects (name, description, start_date, end_date, status, created_b
 ('Application RH', 'Développement d''une application de gestion des ressources humaines', '2025-03-15', '2025-08-15', 'planning', 10),
 ('Plateforme de Formation', 'Création d''une plateforme e-learning pour les employés', '2025-04-01', '2025-09-01', 'planning', 2);
 
--- Insert tasks for each project
-INSERT INTO tasks (title, description, project_id, status, due_date) VALUES
--- Tasks for Website Redesign
-('Analyse des besoins', 'Recueillir et analyser les besoins des utilisateurs', 1, 'done', '2025-01-10'),
-('Maquettes UI/UX', 'Créer les maquettes pour le nouveau site', 1, 'in_progress', '2025-02-01'),
-('Développement Frontend', 'Implémenter l''interface utilisateur', 1, 'todo', '2025-03-01'),
-('Tests d''intégration', 'Effectuer les tests d''intégration', 1, 'todo', '2025-04-01'),
-
--- Tasks for Mobile App
-('Architecture App', 'Définir l''architecture de l''application', 2, 'in_progress', '2025-02-15'),
-('Design UI Mobile', 'Créer le design de l''interface mobile', 2, 'todo', '2025-03-01'),
-('Développement iOS', 'Développer la version iOS', 2, 'todo', '2025-04-01'),
-('Développement Android', 'Développer la version Android', 2, 'todo', '2025-04-01'),
-
--- Tasks for Management System
-('Analyse du système', 'Analyser le système actuel', 3, 'done', '2025-01-20'),
-('Configuration Serveur', 'Configurer l''environnement serveur', 3, 'in_progress', '2025-02-01'),
-('Développement Backend', 'Développer les APIs backend', 3, 'todo', '2025-03-01'),
-('Formation Utilisateurs', 'Former les utilisateurs au nouveau système', 3, 'todo', '2025-04-15'),
-
--- Tasks for E-commerce Platform
-('Étude de marché', 'Analyser le marché et la concurrence', 4, 'in_progress', '2025-03-15'),
-('Architecture système', 'Définir l''architecture du système', 4, 'todo', '2025-04-01'),
-('Intégration paiement', 'Intégrer les systèmes de paiement', 4, 'todo', '2025-05-01'),
-('Tests de sécurité', 'Effectuer les tests de sécurité', 4, 'todo', '2025-06-01'),
-
--- Tasks for BI System
-('Analyse des données', 'Analyser les sources de données existantes', 5, 'in_progress', '2025-02-20'),
-('Conception ETL', 'Concevoir les processus ETL', 5, 'todo', '2025-03-15'),
-('Développement Tableaux', 'Créer les tableaux de bord', 5, 'todo', '2025-04-15'),
-('Tests Performance', 'Optimiser les performances', 5, 'todo', '2025-05-15'),
-
--- Tasks for DevOps
-('Audit Infrastructure', 'Auditer l''infrastructure existante', 6, 'done', '2025-01-25'),
-('Configuration CI/CD', 'Mettre en place les pipelines CI/CD', 6, 'in_progress', '2025-02-15'),
-('Tests Automatisés', 'Implémenter les tests automatisés', 6, 'todo', '2025-03-10'),
-('Documentation', 'Rédiger la documentation technique', 6, 'todo', '2025-04-01'),
-
--- Tasks for HR App
-('Analyse Processus RH', 'Analyser les processus RH actuels', 7, 'in_progress', '2025-03-20'),
-('Design Interface', 'Designer l''interface utilisateur', 7, 'todo', '2025-04-15'),
-('Développement Core', 'Développer les fonctionnalités principales', 7, 'todo', '2025-05-15'),
-('Intégration Paie', 'Intégrer le système de paie', 7, 'todo', '2025-06-15'),
-
--- Tasks for Training Platform
-('Analyse Besoins Formation', 'Analyser les besoins en formation', 8, 'todo', '2025-04-15'),
-('Création Contenu', 'Créer le contenu des formations', 8, 'todo', '2025-05-15'),
-('Développement Plateforme', 'Développer la plateforme e-learning', 8, 'todo', '2025-06-15'),
-('Tests Utilisateurs', 'Réaliser les tests utilisateurs', 8, 'todo', '2025-07-15');
-
 -- Insert sample categories
-INSERT INTO categories (name) VALUES 
+INSERT INTO categories (name) VALUES
 ('Développement'),
 ('Design'),
 ('Marketing'),
@@ -88,7 +38,7 @@ INSERT INTO categories (name) VALUES
 ('Testing');
 
 -- Insert sample tags
-INSERT INTO tags (name) VALUES 
+INSERT INTO tags (name) VALUES
 ('Urgent'),
 ('En attente'),
 ('Prioritaire'),
@@ -99,93 +49,78 @@ INSERT INTO tags (name) VALUES
 ('Database'),
 ('Performance');
 
--- Update tasks with categories
-UPDATE tasks SET category_id = 1 WHERE id IN (1, 5, 9);  -- Développement
-UPDATE tasks SET category_id = 2 WHERE id IN (2, 6, 10); -- Design
-UPDATE tasks SET category_id = 3 WHERE id IN (3, 7);     -- Marketing
-UPDATE tasks SET category_id = 4 WHERE id IN (4, 8);     -- Bug Fix
+-- Insert tasks for each project
+INSERT INTO tasks (title, description, project_id, category_id, status, due_date) VALUES
+-- Tasks for Website Redesign
+('Analyse des besoins', 'Recueillir et analyser les besoins des utilisateurs', 1, 1, 'done', '2025-01-10'),
+('Maquettes UI/UX', 'Créer les maquettes pour le nouveau site', 1, 2, 'in_progress', '2025-02-01'),
+('Développement Frontend', 'Implémenter l''interface utilisateur', 1, 1, 'todo', '2025-03-01'),
+('Tests d''intégration', 'Effectuer les tests d''intégration', 1, 7, 'todo', '2025-04-01'),
 
--- Link tasks with tags (task_tags)
-INSERT INTO task_tags (task_id, tag_id) VALUES 
-(1, 4), -- Task 1 with Backend
-(1, 7), -- Task 1 with API
-(2, 5), -- Task 2 with Frontend
-(2, 6), -- Task 2 with UI/UX
-(3, 1), -- Task 3 with Urgent
-(4, 1), -- Task 4 with Urgent
-(4, 8), -- Task 4 with Database
-(5, 5), -- Task 5 with Frontend
-(6, 6), -- Task 6 with UI/UX
-(7, 3), -- Task 7 with Prioritaire
-(8, 9), -- Task 8 with Performance
-(9, 4), -- Task 9 with Backend
-(10, 5); -- Task 10 with Frontend
+-- Tasks for Mobile App
+('Architecture App', 'Définir l''architecture de l''application', 2, 1, 'in_progress', '2025-02-15'),
+('Design UI Mobile', 'Créer le design de l''interface mobile', 2, 2, 'todo', '2025-03-01'),
+('Développement iOS', 'Développer la version iOS', 2, 1, 'todo', '2025-04-01'),
+('Développement Android', 'Développer la version Android', 2, 1, 'todo', '2025-04-01'),
+
+-- Tasks for Management System
+('Analyse du système', 'Analyser le système actuel', 3, 1, 'done', '2025-01-20'),
+('Configuration Serveur', 'Configurer l''environnement serveur', 3, 1, 'in_progress', '2025-02-01'),
+('Développement Backend', 'Développer les APIs backend', 3, 1, 'todo', '2025-03-01'),
+('Formation Utilisateurs', 'Former les utilisateurs au nouveau système', 3, 5, 'todo', '2025-04-15'),
+
+-- Tasks for E-commerce Platform
+('Étude de marché', 'Analyser le marché et la concurrence', 4, 3, 'in_progress', '2025-03-15'),
+('Architecture système', 'Définir l''architecture du système', 4, 1, 'todo', '2025-04-01'),
+('Intégration paiement', 'Intégrer les systèmes de paiement', 4, 1, 'todo', '2025-05-01'),
+('Tests de sécurité', 'Effectuer les tests de sécurité', 4, 7, 'todo', '2025-06-01'),
+
+-- Tasks for BI System
+('Analyse des données', 'Analyser les sources de données existantes', 5, 1, 'in_progress', '2025-02-20'),
+('Conception ETL', 'Concevoir les processus ETL', 5, 1, 'todo', '2025-03-15'),
+('Développement Tableaux', 'Créer les tableaux de bord', 5, 1, 'todo', '2025-04-15'),
+('Tests Performance', 'Optimiser les performances', 5, 7, 'todo', '2025-05-15'),
+
+-- Tasks for DevOps
+('Audit Infrastructure', 'Auditer l''infrastructure existante', 6, 1, 'done', '2025-01-25'),
+('Configuration CI/CD', 'Mettre en place les pipelines CI/CD', 6, 1, 'in_progress', '2025-02-15'),
+('Tests Automatisés', 'Implémenter les tests automatisés', 6, 7, 'todo', '2025-03-10'),
+('Documentation', 'Rédiger la documentation technique', 6, 5, 'todo', '2025-04-01'),
+
+-- Tasks for HR App
+('Analyse Processus RH', 'Analyser les processus RH actuels', 7, 1, 'in_progress', '2025-03-20'),
+('Design Interface', 'Designer l''interface utilisateur', 7, 2, 'todo', '2025-04-15'),
+('Développement Core', 'Développer les fonctionnalités principales', 7, 1, 'todo', '2025-05-15'),
+('Intégration Paie', 'Intégrer le système de paie', 7, 1, 'todo', '2025-06-15'),
+
+-- Tasks for Training Platform
+('Analyse Besoins Formation', 'Analyser les besoins en formation', 8, 3, 'todo', '2025-04-15'),
+('Création Contenu', 'Créer le contenu des formations', 8, 5, 'todo', '2025-05-15'),
+('Développement Plateforme', 'Développer la plateforme e-learning', 8, 1, 'todo', '2025-06-15'),
+('Tests Utilisateurs', 'Réaliser les tests utilisateurs', 8, 7, 'todo', '2025-07-15');
+
+-- Link tasks with tags
+INSERT INTO task_tags (task_id, tag_id) VALUES
+(1, 4), (1, 7), (2, 5), (2, 6), (3, 1), (4, 1), (4, 8), (5, 5), (6, 6), (7, 3), (8, 9), (9, 4), (10, 5);
 
 -- Assign users to projects with specific roles
 INSERT INTO user_projects (user_id, project_id, role_name) VALUES
--- Website Redesign Team (Project 1)
-(1, 1, 'manager'),
-(2, 1, 'rwe'),    
-(3, 1, 'membre'),  
-(4, 1, 'rwe_add'), 
-
--- Mobile App Development (Project 2)
-(1, 2, 'rwe'),  
-(2, 2, 'manager'), 
-(5, 2, 'rwe_rm'),  
-(6, 2, 'membre'), 
-
--- Marketing Campaign (Project 3)
-(3, 3, 'manager'),   
-(4, 3, 'rwe_addrm'), 
-(7, 3, 'membre'),   
-(8, 3, 'r-e'),      
-
--- E-commerce Platform (Project 4)
-(5, 4, 'manager'),  
-(6, 4, 'rwe'),      
-(7, 4, 'membre'),   
-(8, 4, 'rwe_add'),  
-
--- Training Program (Project 5)
-(2, 5, 'manager'),  
-(4, 5, 'rwe_rm'),   
-(6, 5, 'membre'),   
-(8, 5, 'r-e'),      
-
--- Data Analysis (Project 6)
-(1, 6, 'manager'),  
-(3, 6, 'rwe_addrm'),
-(5, 6, 'membre'),   
-(7, 6, 'rwe'),      
-
--- Content Creation (Project 7)
-(4, 7, 'manager'),  
-(6, 7, 'rwe'),      
-(8, 7, 'membre'),   
-(2, 7, 'rwe_add'),    
-
--- Learning Platform (Project 8)
-(3, 8, 'manager'),    
-(5, 8, 'rwe_rm'),     
-(7, 8, 'membre'),     
-(1, 8, 'r-e');        
+(1, 1, 'manager'), (2, 1, 'rwe'), (3, 1, 'membre'), (4, 1, 'rwe_add'),
+(1, 2, 'rwe'), (2, 2, 'manager'), (5, 2, 'rwe_rm'), (6, 2, 'membre'),
+(3, 3, 'manager'), (4, 3, 'rwe_addrm'), (7, 3, 'membre'), (8, 3, 'r-e'),
+(5, 4, 'manager'), (6, 4, 'rwe'), (7, 4, 'membre'), (8, 4, 'rwe_add'),
+(2, 5, 'manager'), (4, 5, 'rwe_rm'), (6, 5, 'membre'), (8, 5, 'r-e'),
+(1, 6, 'manager'), (3, 6, 'rwe_addrm'), (5, 6, 'membre'), (7, 6, 'rwe'),
+(4, 7, 'manager'), (6, 7, 'rwe'), (8, 7, 'membre'), (2, 7, 'rwe_add'),
+(3, 8, 'manager'), (5, 8, 'rwe_rm'), (7, 8, 'membre'), (1, 8, 'r-e');
 
 -- Assign users to tasks
 INSERT INTO task_users (task_id, user_id) VALUES
--- Website Redesign Tasks
 (1, 2), (2, 4), (3, 3), (4, 3), (2, 7), (3, 7),
--- Mobile App Tasks
 (5, 2), (6, 4), (7, 3), (8, 6), (7, 8), (8, 8),
--- Management System Tasks
 (9, 5), (10, 6), (11, 3), (12, 2), (11, 9),
--- E-commerce Platform Tasks
 (13, 2), (14, 3), (15, 6), (16, 5), (15, 11),
--- BI System Tasks
 (17, 5), (18, 7), (19, 9), (20, 11),
--- DevOps Tasks
 (21, 1), (22, 3), (23, 6), (24, 9),
--- HR App Tasks
 (25, 10), (26, 8), (27, 11), (28, 12),
--- Training Platform Tasks
 (29, 2), (30, 4), (31, 7), (32, 12);
