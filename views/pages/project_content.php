@@ -1,14 +1,18 @@
 <!-- project content details -->
 <?php
-//  pd([
-//     'project' => $project,
-//     'tasks' => $tasks,
-//     'team' => $team,
-//     'availableUsers'=>$availableUsers,
-//     'stats' => $stats,
+// dd($this->hasPermission($permissions,'addMember'));
+// dd($permissions);
+// dd($this->hasPermission($permissions,'updateVisibility'));
+// dd($_SESSION);
+//  dd([
+// //     // 'project' => $project,
+// //     // 'tasks' => $tasks,
+// //     // 'team' => $team,
+// //     'availableUsers'=>$availableUsers,
+// //     // 'stats' => $stats,
 //     'permissions'=>$permissions,
-//     'categories' => $categories,
-//     'tags' => $tags
+// //     // 'categories' => $categories,
+// //     // 'tags' => $tags
 // ]);
 ?>
 
@@ -39,6 +43,8 @@
         <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-900">Détails du projet</h2>
                 <form action="/project/updateVisibility" method="POST" class="inline">
+                                             <!-- CSRF -->
+                                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                     <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
                     <input type="hidden" name="visibility" value="<?= $project['visibility'] === 'public' ? 'private' : 'public' ?>">
                     <button type="submit" class="flex items-center text-sm <?= $project['visibility'] === 'public' ? 'text-green-600 hover:text-green-700' : 'text-gray-600 hover:text-gray-700' ?>">
@@ -73,6 +79,13 @@
                         <div class="bg-green-500 h-2 rounded-full" style="width: <?= $progress ?>%"></div>
                     </div>
                 </div>
+                 <!-- Add Chart Container -->
+        <div>
+            <label class="text-sm font-medium text-gray-500">Répartition des tâches</label>
+            <div class="mt-2">
+                <canvas id="taskStatusChart"></canvas>
+            </div>
+        </div>
             </div>
         </div>
 
@@ -80,9 +93,11 @@
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-lg font-medium text-gray-900">Membres de l'équipe</h2>
+                <?php if($this->hasPermission($permissions,'addMember')):?>
                 <button onclick="openAddMemberModal()" class="text-sm text-indigo-600 hover:text-indigo-700">
                     <i class="ri-user-add-line mr-1"></i> Ajouter
                 </button>
+                <?php endif; ?>
             </div>
 
             <div class="space-y-3">
@@ -101,8 +116,11 @@
                                         <p class="text-sm text-gray-500"><?= htmlspecialchars($member['email']) ?></p>
                                     </div>
                                 </div>
+                                <?php if($this->hasPermission($permissions,'removeMember')):?>
                                 <div>
                                     <form action="/project/removeMember" method="POST">
+                                                                 <!-- CSRF -->
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                                     <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
                                     <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
                                     <button type="submit" class="text-sm text-red-600 hover:text-red-700">
@@ -110,6 +128,7 @@
                                         </button>
                                     </form>
                                </div>
+                               <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -136,6 +155,8 @@
             <div class="mt-3">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Nouvelle Tâche</h3>
                 <form action="/task/create" method="POST">
+                                             <!-- CSRF -->
+                                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
@@ -241,6 +262,8 @@
 
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/project/addMember" method="POST">
+                                         <!-- CSRF -->
+                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
@@ -323,6 +346,8 @@ function openAddMemberModal() {
                     </div>
                 </div>
                 <form action="/task/delete" method="POST">
+                                             <!-- CSRF -->
+                                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <input type="hidden" name="task_id" id="delete-task-id">
                     <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
@@ -362,6 +387,8 @@ function confirmDelete(id) {
                 <div class="mt-3">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Modifier la Tâche</h3>
                     <form action="/task/edit" method="POST">
+                                                 <!-- CSRF -->
+                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                         <div class="space-y-4">
                             <input type="hidden" name="id" id="edit-task-id">
                             <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
@@ -523,4 +550,79 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 });
+</script>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Add this script at the end of your HTML file -->
+<script>
+    // Function to fetch task statistics and render the chart
+    function loadTaskStatsChart(projectId) {
+    fetch('/project/getChartData', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', 
+            'X-Requested-With': 'XMLHttpRequest' 
+        },
+        body: JSON.stringify({ id: projectId }) 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        renderChart(data); // Render the chart with the fetched data
+    })
+    .catch(error => {
+        console.error('Error fetching chart data:', error);
+    });
+}
+
+    // Function to render the chart
+    function renderChart(stats) {
+        const ctx = document.getElementById('taskStatusChart').getContext('2d');
+        const taskStatusChart = new Chart(ctx, {
+            type: 'bar', // Bar chart
+            data: {
+                labels: ['Todo', 'In Progress', 'Review' ,'Completed' ],
+                datasets: [{
+                    label: 'Task Statistics',
+                    data: [
+                        stats.todo,
+                        stats.in_progress,
+                        stats.review,
+                        stats.completed
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', // Todo
+                        'rgba(255, 206, 86, 0.2)', // In Progress
+                        'rgba(153, 102, 255, 0.2)', // Review
+                        'rgba(75, 192, 192, 0.2)' // Completed
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Load chart data when the page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        const projectId = <?= $project['id'] ?>; 
+        loadTaskStatsChart(projectId);
+    });
 </script>

@@ -73,6 +73,8 @@
         <div class="mt-3">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Nouveau Projet</h3>
             <form id="form-project-add" method="POST" action="/project/create">
+                                         <!-- CSRF -->
+                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nom du projet</label>
