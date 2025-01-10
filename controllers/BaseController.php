@@ -7,6 +7,7 @@ class BaseController {
     public function __construct() {
         $this->db = new Database();
         $this->checkSession();
+        $this->createCSRFToken();
     }
 
     protected function checkSession() {
@@ -61,6 +62,10 @@ class BaseController {
     protected function hasFlashMessage($type) {
         return isset($_SESSION[$type]);
     }
+    protected function haspermission($permissionsList , $permission) {
+        // dd($permissionsList);
+        return in_array($permission , $permissionsList);
+    }
 
     protected function getFlashMessage($type) {
         if ($this->hasFlashMessage($type)) {
@@ -70,6 +75,28 @@ class BaseController {
         }
         return null;
     }
+
+    protected function createCSRFToken() {
+        if(!isset($_SESSION['csrf_token'])){
+          $csrf_token = bin2hex(random_bytes(32));
+          $_SESSION['csrf_token'] = $csrf_token;
+        }
+    }
+
+    protected function destroyCSRFToken() {
+        if(isset($_SESSION['csrf_token'])){
+            unset( $_SESSION['csrf_token']);
+        }
+    }
+
+    protected function isCSRFTokenValid(string $token) {
+        if (isset($_SESSION['csrf_token']) && trim($_SESSION["csrf_token"]) === trim($token)) {
+            return true;
+        }
+
+        return false;
+    }
+    
     protected function _404() {
         require "views/errors/404.php";
     }

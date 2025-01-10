@@ -15,11 +15,13 @@ class PermissionChecker extends BaseController {
         $userId = $_SESSION['user']['id'];
         $roleName = $this->roleModel->getRoleByUserId($userId, $projectId);
         if($roleName == null) return false;
-        $permissions = $this->roleModel->getRolePermissions($roleName);
-        foreach ($permissions as $permission) {
-            if ($permission['name'] == $permission) return true;
-        }
-        return false;
+        $permissions = $this->roleModel->getRolePermissions($roleName)->fetchAll();
+        $permissionsNames = array_map(function($permission) {
+            return $permission['name'];
+        }, $permissions);
+        // dd($permissionsNames);
+       return $this->hasPermission($permissionsNames,$permission);
+
     }
     public function requirePermission($projectId,$permission){
         if (!$this->checkPermission($projectId,$permission)) {
