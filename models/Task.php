@@ -197,7 +197,38 @@ class Task {
             return false;
         }
     }
-    // read
+    
+    public function getTasksTeamStatus($user_id) {
+        $query = "SELECT 
+                        SUM(CASE WHEN t.status = 'todo' THEN 1 ELSE 0 END) AS 'Todo',
+                        SUM(CASE WHEN t.status = 'in_progress' THEN 1 ELSE 0 END) AS 'In Progress',
+                        SUM(CASE WHEN t.status = 'review' THEN 1 ELSE 0 END) AS 'Review',
+                        SUM(CASE WHEN t.status = 'done' THEN 1 ELSE 0 END) AS 'Done'
+                    FROM {$this->table} t
+                    left JOIN projects p ON t.project_id = p.id 
+                    where p.id in (
+                        select pr.project_id
+                           from user_projects pr 
+                           where pr.user_id = :user_id )";
+        $params = ['user_id' => $user_id];
+        return $this->conn->query($query, $params);
+    }
+    
+    public function getTasksStatusForUser($uid) {
+        $query = "SELECT 
+                    SUM(CASE WHEN t.status = 'todo' THEN 1 ELSE 0 END) AS 'Todo',
+                    SUM(CASE WHEN t.status = 'in_progress' THEN 1 ELSE 0 END) AS 'In Progress',
+                    SUM(CASE WHEN t.status = 'review' THEN 1 ELSE 0 END) AS 'Review',
+                    SUM(CASE WHEN t.status = 'done' THEN 1 ELSE 0 END) AS 'Done'
+                FROM " . $this->table . " t
+                JOIN task_users tu ON t.id = tu.task_id
+
+                WHERE tu.user_id = :user_id";
+        $params = ['user_id' => $uid];
+        return $this->conn->query($query, $params);
+        
+    }
+
     public function getTasksByUser($user_id ,$task_status = 'all') {
         $query = "SELECT t.*
                 FROM " . $this->table . " t
@@ -211,6 +242,7 @@ class Task {
 
         return $this->conn->query($query, $params);
     }
+    // read
     public function read($id = null) {
         $query = "SELECT t.*
                 FROM " . $this->table . " t";
@@ -250,7 +282,7 @@ class Task {
 
         
     }
-    
+
     public function removeTaskAssignee($user_id,$project_id) {
 
         $query = "DELETE tu

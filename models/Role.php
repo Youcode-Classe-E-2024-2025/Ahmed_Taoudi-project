@@ -31,17 +31,21 @@ class Role
     }
 
     public function create($array){
+        // dd($array);
         $query = "INSERT INTO " . $this->table . "(name,description) VALUES (:name,:desc)";
-        $this->conn->query($query,['name'=>$this->name ,'desc'=>$this->desc]);
+        if($this->conn->query($query,['name'=>$this->name ,'desc'=>$this->desc])){
 
-        foreach($array as $permission){
-            $this->addPermission($permission);
-        }
+            foreach($array as $permission){
+                $this->addPermission($permission);
+            }
+            return true;
+        } ;
+        return false;
     }
 
     public function addPermission($permission){
-        $query = " INSERT INTO role_permission(role, permission ) VALUES (:role , :permission )" ;
-        $params = ['name'=>$this->name,'permission' => $permission];
+        $query = " INSERT INTO role_permission(role, permission ) VALUES ( :rolename , :permission )" ;
+        $params = ['rolename'=>$this->name,'permission' => $permission];
         $this->conn->query($query,$params);
     }
 

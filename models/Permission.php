@@ -1,6 +1,6 @@
 <?php 
 
-class Role 
+class Permission 
 {
 
     private $table = 'permission';
