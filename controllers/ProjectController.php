@@ -47,7 +47,10 @@ class ProjectController extends BaseController {
             $this->roleModel->setName($roleName);
             $permissions = $this->roleModel->getPermissions()->fetchAll();
 
-            
+            $permissionNames = array_map(function($permission) {
+                return $permission['name'];
+            }, $permissions);
+
             // Get categories and tags
             $categories = $this->categoryModel->getAllCategories()->fetchAll();
             $tags = $this->tagModel->getAllTags()->fetchAll();
@@ -58,7 +61,7 @@ class ProjectController extends BaseController {
                 'team' => $team,
                 'availableUsers'=>$availableUsers,
                 'stats' => $stats,
-                'permissions'=>$permissions,
+                'permissions'=>$permissionNames,
                 'categories' => $categories,
                 'tags' => $tags
             ]);
@@ -74,6 +77,14 @@ class ProjectController extends BaseController {
         if ($this->isPost()) {
             // echo $this->user['id'] ;
             // dd($_POST);
+              // CSRF
+              $token = $_POST['csrf_token'] ?? 'hh';
+              if(!$this->isCSRFTokenValid($token)){
+                  $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+                  $this->redirect('/projects');
+              };
+              $this->destroyCSRFToken();
+
             $this->projectModel->setName(Validator::XSS($_POST['name']));
             $this->projectModel->setDescription(Validator::XSS($_POST['description'])) ;
             $this->projectModel->setStartDate(Validator::XSS($_POST['start_date'])) ;
@@ -100,6 +111,14 @@ class ProjectController extends BaseController {
         $this->requireAuth();
 
         if ($this->isPost()) {
+              // CSRF
+              $token = $_POST['csrf_token'] ?? 'hh';
+              if(!$this->isCSRFTokenValid($token)){
+                  $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+                  $this->redirect('/');
+              };
+              $this->destroyCSRFToken();
+
             $this->projectModel->setId($_POST['id']);
             $this->projectModel->setName(Validator::XSS($_POST['name']));
             $this->projectModel->setDescription(Validator::XSS($_POST['description'])) ;
@@ -122,15 +141,22 @@ class ProjectController extends BaseController {
 
     public function delete() {
         $this->requireAuth();
-        // $this->permissionChecker->requirePermission($_GET['id'],"edit");
-        if (isset($_GET['id'])) {
-            if ($this->projectModel->delete($_GET['id'])) {
+        // $this->permissionChecker->requirePermission($_GET['id'],"deleteProject");
+          // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+
+        if (isset($_POST['id'])) {
+            if ($this->projectModel->delete($_POST['id'])) {
                 $_SESSION['message'] = 'Project deleted successfully';
             } else {
                 $_SESSION['error'] = 'Failed to delete project';
             }
         }
-        
         $this->redirect('/projects');
     }
 
@@ -138,10 +164,18 @@ class ProjectController extends BaseController {
         $this->requireAuth();
         
         if ($this->isPost()) {
+             // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+
             $projectId = Validator::XSS($_POST['project_id']);
             $visibility = Validator::XSS($_POST['visibility']);
 
-            $this->permissionChecker->requirePermission($projectId,"update_visibility");
+            $this->permissionChecker->requirePermission($projectId,"updateVisibility");
 
             if (!in_array($visibility, ['public', 'private'])) {
                 $_SESSION['error'] = "Visibilité invalide";
@@ -154,7 +188,7 @@ class ProjectController extends BaseController {
             } else {
                 $_SESSION['error'] = "Erreur lors de la mise à jour de la visibilité";
             }
-            
+           
             $this->redirect('/projects?id=' . $projectId);
         }else{
            return $this->_404();
@@ -164,6 +198,14 @@ class ProjectController extends BaseController {
         $this->requireAuth();
         // dd($_POST);
         if ($this->isPost()) {
+             // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+
             $projectId = Validator::XSS($_POST['project_id']);
             $this->permissionChecker->requirePermission($projectId,"addMember");
 
@@ -188,7 +230,7 @@ class ProjectController extends BaseController {
         if ($this->isPost()) {
             // dd($_POST);
             $projectId = Validator::XSS($_POST['project_id']);
-            // $this->permissionChecker->requirePermission($projectId,"removeMember");
+            $this->permissionChecker->requirePermission($projectId,"removeMember");
 
             $user_id = $_POST['user_id'];
             $this->projectModel->setId($projectId) ;
@@ -204,4 +246,24 @@ class ProjectController extends BaseController {
            return $this->_404();
         }
     }
+    public function getChartData() {
+        $this->requireAuth();
+    
+        // Get the raw JSON input
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+    
+        if (!$data || !isset($data['id'])) {
+            http_response_code(400); // Bad request
+            echo json_encode(['error' => 'Invalid input']);
+            exit;
+        }
+    
+        $this->projectModel->setId($data['id']);
+        $stats = $this->projectModel->getTaskStats();
+        header('Content-Type: application/json');
+        echo json_encode($stats);
+        exit;
+    }
+    
 }
