@@ -22,6 +22,8 @@
             </div>
 
             <form action="/"  method="POST" class="space-y-6">
+                                         <!-- CSRF -->
+                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"> 
                 <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded" role="alert">
                     <p class="text-blue-700">
                         <i class="fas fa-info-circle mr-2"></i>
