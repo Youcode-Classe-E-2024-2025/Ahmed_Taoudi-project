@@ -27,10 +27,10 @@
                     <i class="ri-task-line text-xl text-gray-500 group-hover:text-emerald-600"></i>
                     <span class="ml-3">Tâches</span>
                 </a>
-                <a href="/team" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-emerald-100 group">
+                <!-- <a href="/team" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-emerald-100 group">
                     <i class="ri-team-line text-xl text-gray-500 group-hover:text-emerald-600"></i>
                     <span class="ml-3">Équipe</span>
-                </a>
+                </a> -->
                 <div class="pt-4 mt-4 border-t border-gray-200">
                     <div class="flex items-center justify-between px-2">
                         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">

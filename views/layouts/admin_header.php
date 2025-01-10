@@ -57,6 +57,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="/admin/permissions" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-emerald-100 group">
+                        <i class=" ri-shield-keyhole-line text-xl text-emerald-600"></i>
+                        <span class="ml-3">Permissions</span>
+                    </a>
+                </li>
+                <li>
                     <a href="/" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-emerald-100 group">
                         <i class="ri-arrow-left-line text-xl text-emerald-600"></i>
                         <span class="ml-3">Back to Site</span>
@@ -66,3 +72,13 @@
         </div>
     </aside>
 
+    <script>
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+        }
+    });
+    </script>

@@ -6,7 +6,7 @@
     });
 
     function editUser(user) {
-        
+        // Implement edit user functionality
     }
 
     function deleteUser(userId) {
@@ -15,7 +15,9 @@
         }
     }
 
-
+    // function editRole(role) {
+    //     // Implement edit role functionality
+    // }
 
     function deleteRole(roleName) {
         if (confirm('Are you sure you want to delete this role?')) {
@@ -32,7 +34,7 @@ function editRole(name, description, permissions) {
     const checkboxes = document.querySelectorAll('#edit_permissions input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = false);
     
-   
+    // Check the permissions that the role has
     if (permissions) {
         const rolePermissions = permissions.split(',').map(p => p.trim());
         checkboxes.forEach(cb => {
