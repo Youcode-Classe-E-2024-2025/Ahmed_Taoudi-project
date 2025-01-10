@@ -56,7 +56,7 @@ class AdminController extends BaseController
             }
         }
 
-        $this->redirect('/admin');
+        $this->redirect('/admin/users');
     }
 
     public function updateUser() {
@@ -74,7 +74,7 @@ class AdminController extends BaseController
             }
         }
 
-        $this->redirect('/admin');
+        $this->redirect('/admin/users');
     }
 
     public function deleteUser() {
@@ -90,7 +90,7 @@ class AdminController extends BaseController
             }
         }
 
-        $this->redirect('/admin');
+        $this->redirect('/admin/users');
     }
 
     public function users() {
@@ -106,19 +106,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    // Role Management
-    private function getAllRoles() {
-        $roles = $this->db->query("SELECT * FROM roles")->fetchAll();
-        foreach ($roles as &$role) {
-            $this->roleModel->setName($role['name']);
-            $role['permissions'] = $this->roleModel->getPermissions()->fetchAll();
-        }
-        return $roles;
-    }
 
-    private function getAllPermissions() {
-        return $this->db->query("SELECT * FROM permission")->fetchAll();
-    }
 
     public function roles() {
         $this->requireAdmin();
@@ -139,7 +127,7 @@ class AdminController extends BaseController
         if ($this->isPost()) {
             $this->roleModel->setName(Validator::XSS($_POST['name']));
             $this->roleModel->setDesc(Validator::XSS($_POST['description']));
-            
+            // dd($_POST);
             if ($this->roleModel->create($_POST['permissions'] ?? [])) {
                 $_SESSION['message'] = 'Role created successfully';
             } else {
@@ -147,7 +135,7 @@ class AdminController extends BaseController
             }
         }
         
-        $this->redirect('/admin');
+        $this->redirect('/admin/roles');
     }
 
     public function editRole() {
@@ -164,7 +152,7 @@ class AdminController extends BaseController
             }
         }
         
-        $this->redirect('/admin');
+        $this->redirect('/admin/roles');
     }
 
     public function deleteRole() {
@@ -180,7 +168,7 @@ class AdminController extends BaseController
             }
         }
         
-        $this->redirect('/admin');
+        $this->redirect('/admin/roles');
     }
 
     private function requireAdmin() {
@@ -188,5 +176,12 @@ class AdminController extends BaseController
         //     $this->redirect('/');
         // }
         return true;
+    }
+    public function permissions() {
+        $this->requireAdmin();
+        
+       $this->render('admin/permissions', [
+           'permissions' => $this->roleModel->getAllPermissions(),
+       ]);
     }
 }

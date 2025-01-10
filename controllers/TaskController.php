@@ -71,7 +71,17 @@ class TaskController extends BaseController {
         $this->requireAuth();
         
         if ($this->isPost()) {
-            // $this->permissionChecker->requirePermission($_POST['project_id'],"write");
+
+                         // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+
+            $this->permissionChecker->requirePermission($_POST['project_id'],"write");
+
             $this->taskModel->setProjectId(Validator::XSS($_POST['project_id']));
             $this->taskModel->setTitle(Validator::XSS($_POST['title'])) ;
             $this->taskModel->setDescription(Validator::XSS($_POST['description']));
@@ -136,7 +146,14 @@ class TaskController extends BaseController {
     public function updateStatus() {
         $this->requireAuth();
         if ($this->isPost()) {
-            // $this->permissionChecker->requirePermission($_POST['project_id'],"read");
+                         // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+            $this->permissionChecker->requirePermission($_POST['project_id'],"read");
             // dd($_POST);
             $this->taskModel->setId($_POST['task_id']) ;
             $this->taskModel->setStatus($_POST['status']);
@@ -160,7 +177,14 @@ class TaskController extends BaseController {
     public function edit() {
         $this->requireAuth();
         if ($this->isPost()) {
-            // $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
+                         // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+            $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
 
             $this->taskModel->setId($_POST['id']) ;
             $this->taskModel->setTitle($_POST['title']) ;
@@ -205,7 +229,15 @@ class TaskController extends BaseController {
 
         if (isset($_POST['task_id'])) {
             // dd($_POST);
-            // $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
+                         // CSRF
+          $token = $_POST['csrf_token'] ?? 'hh';
+          if(!$this->isCSRFTokenValid($token)){
+              $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+              $this->redirect('/projects');
+          };
+          $this->destroyCSRFToken();
+          
+            $this->permissionChecker->requirePermission($_POST['project_id'],"edit");
 
             $this->taskModel->setId($_POST['task_id']);
             if ($this->taskModel->delete()) {

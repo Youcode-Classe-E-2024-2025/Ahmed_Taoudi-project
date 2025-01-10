@@ -27,9 +27,13 @@ class AuthController extends BaseController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              // CSRF
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            die("CSRF token validation failed. Possible CSRF attack.");
-        }
+             $token = $_POST['csrf_token'] ?? 'hh';
+            if(!$this->isCSRFTokenValid($token)){
+                $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+                $this->redirect('/login');
+            };
+            $this->destroyCSRFToken();
+
             $email = Validator::XSS($_POST['email']);;
             $password = $_POST['password'];
 
@@ -61,9 +65,12 @@ class AuthController extends BaseController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              // CSRF
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            die("CSRF token validation failed. Possible CSRF attack.");
-        }
+             $token = $_POST['csrf_token'] ?? 'hh';
+            if(!$this->isCSRFTokenValid($token)){
+                $_SESSION['error'] = 'CSRF token validation failed. Possible CSRF attack.';
+                $this->redirect('/register');
+            };
+            $this->destroyCSRFToken();
             $name = Validator::XSS($_POST['name']);
             $email = Validator::XSS($_POST['email']);;
             $password = $_POST['password'];
