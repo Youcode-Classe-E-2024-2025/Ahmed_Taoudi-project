@@ -17,6 +17,7 @@ $router->register('/user/edit', 'UserController', 'edit');
 
 // Project routes
 $router->register('/projects', 'ProjectController', 'index');
+$router->register('/project/getChartData', 'ProjectController', 'getChartData');
 $router->register('/project/create', 'ProjectController', 'create');
 $router->register('/project/edit', 'ProjectController', 'edit');
 $router->register('/project/delete', 'ProjectController', 'delete');
@@ -43,3 +44,4 @@ $router->register('/admin/roles', 'AdminController', 'roles');
 $router->register('/admin/roles/create', 'AdminController', 'createRole');
 $router->register('/admin/roles/edit', 'AdminController', 'editRole');
 $router->register('/admin/roles/delete', 'AdminController', 'deleteRole');
+$router->register('/admin/permissions', 'AdminController', 'permissions');
